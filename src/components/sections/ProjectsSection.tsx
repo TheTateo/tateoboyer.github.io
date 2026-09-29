@@ -1,0 +1,52 @@
+import { Link } from "react-router-dom";
+import { Arrow } from "../Icons";
+import ProjectsShowcase from "../ProjectsShowcase";
+import { useProjects } from "../../context/ProjectsContext";
+
+const FEATURED_COUNT = 3;
+
+type ProjectsSectionProps = {
+  featuredOnly?: boolean;
+};
+
+export default function ProjectsSection({ featuredOnly = false }: ProjectsSectionProps) {
+  const { projects } = useProjects();
+  const displayedProjects = featuredOnly
+    ? projects.slice(0, FEATURED_COUNT)
+    : projects;
+
+  return (
+    <section
+      id="projets"
+      className="border-y border-white/10 bg-[#0b0e12] py-28 md:py-40"
+    >
+      <div className="mx-auto max-w-[1500px] px-5 md:px-10">
+        <div className="flex flex-col justify-between gap-6 md:flex-row md:items-end">
+          <div>
+            <p className="eyebrow">
+              {featuredOnly
+                ? "ARCHIVES SÉLECTIONNÉES"
+                : `${projects.length} PROJET${projects.length > 1 ? "S" : ""}`}
+            </p>
+            <h2 className="section-title mt-4">PROJETS.</h2>
+          </div>
+          <p className="max-w-sm text-sm leading-6 text-white/45">
+            Une sélection de projets scolaires et personnels à la croisée du
+            design, du mouvement et du code.
+          </p>
+        </div>
+
+        <ProjectsShowcase projects={displayedProjects} />
+
+        {featuredOnly && (
+          <Link
+            to="/projets"
+            className="text-link mt-14 inline-flex items-center gap-4"
+          >
+            VOIR TOUS LES PROJETS <Arrow />
+          </Link>
+        )}
+      </div>
+    </section>
+  );
+}

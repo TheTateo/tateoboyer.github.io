@@ -1,0 +1,123 @@
+import { useRef, useState, type ChangeEvent } from "react";
+import { useProjects } from "../../context/ProjectsContext";
+import { useSkills } from "../../context/SkillsContext";
+import {
+  normalizeProjects,
+  normalizeSkills,
+  normalizeTools,
+} from "../../lib/normalize";
+import type { PortfolioExport } from "../../types";
+
+export default function DataTools() {
+  const { projects, replaceProjects, resetProjects } = useProjects();
+  const { skills, tools, replaceSkills, replaceTools, resetSkills } =
+    useSkills();
+
+  const fileInput = useRef<HTMLInputElement>(null);
+  const [message, setMessage] = useState("");
+
+  const handleExport = () => {
+    const payload: PortfolioExport = { version: 1, projects, skills, tools };
+    const blob = new Blob([JSON.stringify(payload, null, 2)], {
+      type: "application/json",
+    });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = "portfolio-data.json";
+    link.click();
+    URL.revokeObjectURL(url);
+    setMessage("Export téléchargé : portfolio-data.json");
+  };
+
+  const handleImport = async (event: ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    event.target.value = "";
+    if (!file) return;
+
+    try {
+      const data: unknown = JSON.parse(await file.text());
+
+      if (typeof data !== "object" || data === null || Array.isArray(data)) {
+        throw new Error("Format inattendu");
+      }
+
+      const record = data as Record<string, unknown>;
+      const hasKnownKey = ["projects", "skills", "tools"].some(
+        (key) => key in record,
+      );
+      if (!hasKnownKey) throw new Error("Aucune donnée reconnue");
+
+      if ("projects" in record) replaceProjects(normalizeProjects(record.projects));
+      if ("skills" in record) replaceSkills(normalizeSkills(record.skills));
+      if ("tools" in record) replaceTools(normalizeTools(record.tools));
+
+      setMessage("Import réussi : les données ont été remplacées.");
+    } catch {
+      setMessage("Fichier invalide : rien n'a été modifié.");
+    }
+  };
+
+  const handleReset = () => {
+    if (
+      !window.confirm(
+        "Remettre les projets, compétences et outils aux valeurs par défaut ?",
+      )
+    ) {
+      return;
+    }
+    resetProjects();
+    resetSkills();
+    setMessage("Données réinitialisées.");
+  };
+
+  return (
+    <section className="mt-16 border-t border-white/10 pt-10">
+      <p className="mb-2 text-xs tracking-[0.2em] text-white/40">DONNÉES</p>
+      <h2 className="mb-3 text-2xl font-bold">SAUVEGARDE</h2>
+      <p className="mb-6 max-w-2xl text-sm leading-6 text-white/45">
+        Tes modifications sont stockées dans ce navigateur uniquement : les
+        visiteurs ne les voient pas. Exporte-les pour les sauvegarder, les
+        transférer sur un autre appareil ou les recopier dans{" "}
+        <code>src/data/defaults.ts</code>.
+      </p>
+
+      <div className="flex flex-wrap gap-3">
+        <button
+          type="button"
+          onClick={handleExport}
+          className="border border-white/20 px-5 py-3 text-xs font-bold tracking-[0.15em] transition hover:border-acid hover:text-acid"
+        >
+          EXPORTER (JSON)
+        </button>
+        <button
+          type="button"
+          onClick={() => fileInput.current?.click()}
+          className="border border-white/20 px-5 py-3 text-xs font-bold tracking-[0.15em] transition hover:border-acid hover:text-acid"
+        >
+          IMPORTER (JSON)
+        </button>
+        <button
+          type="button"
+          onClick={handleReset}
+          className="border border-white/20 px-5 py-3 text-xs font-bold tracking-[0.15em] text-white/50 transition hover:border-red-400 hover:text-red-400"
+        >
+          RÉINITIALISER
+        </button>
+
+        <input
+          ref={fileInput}
+          type="file"
+          accept="application/json,.json"
+          onChange={handleImport}
+          className="hidden"
+          aria-label="Fichier JSON à importer"
+        />
+      </div>
+
+      <p role="status" aria-live="polite" className="mt-5 min-h-5 text-sm text-acid">
+        {message}
+      </p>
+    </section>
+  );
+}

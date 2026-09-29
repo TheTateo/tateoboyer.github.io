@@ -1,6 +1,18 @@
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Rajdhani:wght@400;500;600;700&display=swap");
 @import "tailwindcss";
 
+/* --- Design tokens exposés à Tailwind -------------------------------------
+   Changer la couleur du site = modifier UNIQUEMENT --acid dans :root.
+   Utilisable ensuite via : text-acid, bg-acid, border-acid, bg-acid/10, accent-acid...
+-------------------------------------------------------------------------- */
+@theme inline {
+  --color-acid: var(--acid);
+}
+
+@theme {
+  --color-ink: #080a0d;
+}
+
 :root {
   color-scheme: dark;
   font-family: "Inter", sans-serif;
@@ -45,7 +57,7 @@ button {
   top: var(--my);
   pointer-events: none;
   transform: translate(-50%, -50%);
-  background: radial-gradient(circle, rgba(216,255,85,.045), transparent 64%);
+  background: radial-gradient(circle, color-mix(in srgb, var(--acid) 4.5%, transparent), transparent 64%);
   mix-blend-mode: screen;
 }
 
@@ -59,16 +71,22 @@ button {
   transition: filter .3s, transform .3s;
 }
 
-.cut-button:hover {
+.cut-button:hover:not(:disabled) {
   filter: brightness(1.2);
   transform: translateY(-2px);
+}
+
+.cut-button:disabled {
+  opacity: .5;
+  cursor: not-allowed;
 }
 
 .nav-link {
   transition: color .25s;
 }
 
-.nav-link:hover {
+.nav-link:hover,
+.nav-link.active {
   color: white;
 }
 
@@ -271,9 +289,9 @@ button {
   align-items: center;
   justify-content: center;
   gap: 18px;
-  color: rgba(216,255,85,.5);
+  color: color-mix(in srgb, var(--acid) 50%, transparent);
   background:
-    radial-gradient(circle at 50% 40%, rgba(216,255,85,.14), transparent 30%),
+    radial-gradient(circle at 50% 40%, color-mix(in srgb, var(--acid) 14%, transparent), transparent 30%),
     repeating-linear-gradient(0deg, transparent 0 5px, rgba(255,255,255,.025) 6px),
     #0d1115;
 }
@@ -415,7 +433,7 @@ button {
 
 .radar-ring {
   position: absolute;
-  border: 1px solid rgba(216,255,85,.28);
+  border: 1px solid color-mix(in srgb, var(--acid) 28%, transparent);
   border-radius: 50%;
 }
 .ring-one { width: 30%; height: 30%; }
@@ -429,7 +447,7 @@ button {
   top: 0;
   left: 50%;
   transform-origin: bottom left;
-  background: conic-gradient(from 260deg at 0 100%, rgba(216,255,85,.22), transparent 25%);
+  background: conic-gradient(from 260deg at 0 100%, color-mix(in srgb, var(--acid) 22%, transparent), transparent 25%);
   animation: sweep 4s linear infinite;
 }
 
@@ -442,7 +460,7 @@ button {
   position: relative;
   height: 1px;
   background: var(--acid);
-  box-shadow: 0 0 10px rgba(216,255,85,.6);
+  box-shadow: 0 0 10px color-mix(in srgb, var(--acid) 60%, transparent);
 }
 
 .skill-level::after {
@@ -458,6 +476,7 @@ button {
 
 .tech-chip {
   padding: 8px 12px;
+  text-transform: uppercase;
   border: 1px solid rgba(255,255,255,.14);
   font-size: 8px;
   font-weight: 700;
@@ -602,4 +621,45 @@ button {
     animation-iteration-count: 1 !important;
     transition-duration: .01ms !important;
   }
+}
+
+
+/* --- Formulaires (contact, login admin, admin) --------------------------- */
+.field-label {
+  display: block;
+  margin-bottom: .5rem;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .2em;
+  color: rgba(255,255,255,.5);
+}
+
+.field-input {
+  width: 100%;
+  padding: .85rem 1rem;
+  border: 1px solid rgba(255,255,255,.12);
+  background: rgba(255,255,255,.03);
+  font-size: .875rem;
+  color: inherit;
+  outline: none;
+  transition: border-color .25s, background .25s;
+}
+
+.field-input::placeholder {
+  color: rgba(255,255,255,.22);
+}
+
+.field-input:focus {
+  border-color: var(--acid);
+  background: rgba(255,255,255,.05);
+}
+
+.field-input[aria-invalid="true"] {
+  border-color: #ff694a;
+}
+
+.field-error {
+  margin-top: .5rem;
+  font-size: 12px;
+  color: #ff8a70;
 }
