@@ -45,9 +45,18 @@ export default function ProjectsShowcase({ projects }: ProjectsShowcaseProps) {
               <h3 className="font-display text-[clamp(2.5rem,7vw,6.6rem)] leading-none tracking-[-0.04em]">
                 {project.title}
               </h3>
-              <p className="mt-2 text-[10px] font-semibold uppercase tracking-[0.2em] text-white/40">
-                {project.type}
-              </p>
+              {project.technologies.length > 0 && (
+                <div className="mt-4 flex max-w-full gap-2 overflow-x-auto pb-1">
+                  {project.technologies.map((technology) => (
+                    <span
+                      key={technology}
+                      className="shrink-0 border border-white/15 px-3 py-2 text-[10px] font-semibold uppercase tracking-[0.15em] text-white/50"
+                    >
+                      {technology}
+                    </span>
+                  ))}
+                </div>
+              )}
             </div>
 
             <span className="project-arrow">

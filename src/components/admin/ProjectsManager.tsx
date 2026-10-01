@@ -20,6 +20,9 @@ export default function ProjectsManager() {
   const [form, setForm] = useState<ProjectInput>(createEmptyForm);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [error, setError] = useState("");
+  const [draggedTechnology, setDraggedTechnology] = useState<string | null>(
+    null,
+  )
 
   const resetForm = () => {
     setForm(createEmptyForm());
@@ -38,6 +41,26 @@ export default function ProjectsManager() {
               (technology) => technology !== technologyName,
           )
           : [...current.technologies, technologyName],
+      };
+    });
+  };
+
+  const moveTechnology = (fromName: string, toName: string) => {
+    setForm((current) => {
+      const technologies = [...current.technologies];
+      const fromIndex = technologies.indexOf(fromName);
+      const toIndex = technologies.indexOf(toName);
+
+      if (fromIndex === -1 || toIndex === -1 || fromIndex === toIndex) {
+        return current;
+      }
+
+      const [movedTechnology] = technologies.splice(fromIndex, 1);
+      technologies.splice(toIndex, 0, movedTechnology);
+
+      return {
+        ...current,
+        technologies,
       };
     });
   };
@@ -74,7 +97,7 @@ export default function ProjectsManager() {
     };
 
     if (!input.title) {
-      setError("Le titre est obligatoires.");
+      setError("Le titre est obligatoire.");
       return;
     }
 
@@ -231,12 +254,48 @@ export default function ProjectsManager() {
                 </div>
               )}
             </div>
+            
               {form.technologies.length > 0 && (
                 <p className="mt-3 text-xs text-white/30">
                   {form.technologies.length} technologie
                   {form.technologies.length > 1 ? "s" : ""} sélectionnée
                   {form.technologies.length > 1 ? "s" : ""}.
                 </p>
+              )}
+
+              {form.technologies.length > 0 && (
+                <div className="mt-5">
+                  <p className="mb-2 text-[10px] font-bold tracking-[0.2em] text-white/30">
+                    ORDRE D&apos;AFFICHAGE — GLISSER POUR RÉORGANISER
+                  </p>
+
+                  <div className="flex flex-wrap gap-2">
+                    {form.technologies.map((technologyName) => (
+                      <button
+                        key={technologyName}
+                        type="button"
+                        draggable
+                        onDragStart={() => setDraggedTechnology(technologyName)}
+                        onDragEnd={() => setDraggedTechnology(null)}
+                        onDragOver={(event) => event.preventDefault()}
+                        onDrop={() => {
+                          if (draggedTechnology) {
+                            moveTechnology(draggedTechnology, technologyName);
+                          }
+
+                          setDraggedTechnology(null);
+                        }}
+                        className={`cursor-grab border border-acid bg-acid px-3 py-2 text-xs font-bold tracking-[0.08em] text-ink transition active:cursor-grabbing ${
+                          draggedTechnology === technologyName
+                            ? "opacity-40"
+                            : "opacity-100"
+                        }`}
+                      >
+                        {technologyName}
+                      </button>
+                    ))}
+                  </div>
+                </div>
               )}
 
             <div>
