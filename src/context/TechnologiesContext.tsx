@@ -5,6 +5,7 @@ import {
   type ReactNode,
 } from "react";
 import type { Technology } from "../types";
+import { defaultTechnologies } from "../data/defaults";
 import { usePersistentState } from "../hooks/usePersistentState";
 
 const TECHNOLOGIES_STORAGE_KEY = "portfolio-technologies";
@@ -41,7 +42,7 @@ export function TechnologiesProvider({
 }: TechnologiesProviderProps) {
   const [technologies, setTechnologies] = usePersistentState<Technology[]>(
     TECHNOLOGIES_STORAGE_KEY,
-    [],
+    defaultTechnologies,
     normalizeTechnologies,
   );
 

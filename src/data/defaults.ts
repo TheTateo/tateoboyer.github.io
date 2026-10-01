@@ -1,4 +1,4 @@
-import type { Project, Skill } from "../types";
+import type { Project, Skill, Technology } from "../types";
 
 /**
  * Données affichées tant que rien n'a été enregistré dans le navigateur.
@@ -37,6 +37,33 @@ export const defaultProjects: Project[] = [
     image:
       "https://images.unsplash.com/photo-1712508818674-1eac0c173733?auto=format&fit=crop&w=1400&q=85",
     color: "#d8ff55",
+  },
+];
+
+export const defaultTechnologies: Technology[] = [
+  {
+    id: "technology-identite-visuelle",
+    name: "Identité visuelle",
+  },
+  {
+    id: "technology-ui-ux",
+    name: "UI/UX",
+  },
+  {
+    id: "technology-direction-artistique",
+    name: "Direction artistique",
+  },
+  {
+    id: "technology-3d",
+    name: "3D",
+  },
+  {
+    id: "technology-motion-design",
+    name: "Motion design",
+  },
+  {
+    id: "technology-experience",
+    name: "Expérience",
   },
 ];
 
