@@ -23,11 +23,25 @@ export function normalizeProjects(raw: unknown): Project[] {
     .map((item, index): Project => {
       const color = asString(item.color);
 
+      const legacyType = asString(item.type).trim();
+
+      const technologies = Array.isArray(item.technologies)
+        ? item.technologies
+            .filter(
+              (technology): technology is string =>
+                  typeof technology === "string",
+            )
+              .map((technology) => technology.trim())
+              .filter(Boolean)
+            : legacyType
+              ? [legacyType]
+              : [];
+
       return {
         // Anciennes données : pas d'id -> on en fabrique un stable
         id: asString(item.id) || `legacy-${index}`,
         title: asString(item.title).trim(),
-        type: asString(item.type).trim(),
+        technologies: Array.from(new Set(technologies)),
         description: asString(item.description).trim(),
         image: asString(item.image).trim(),
         color: isHexColor(color) ? color : FALLBACK_ACCENT,

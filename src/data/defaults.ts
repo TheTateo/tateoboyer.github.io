@@ -11,7 +11,7 @@ export const defaultProjects: Project[] = [
   {
     id: "project-humain-orbital",
     title: "HUMAIN//ORBITAL",
-    type: "Identité visuelle · UI/UX",
+    technologies: ["Identité visuelle", "UI/UX"],
     description:
       "Une expérience spatiale immersive où l'interface devient un instrument de navigation.",
     image:
@@ -21,7 +21,7 @@ export const defaultProjects: Project[] = [
   {
     id: "project-exo-mind",
     title: "EXO//MIND",
-    type: "Direction artistique · 3D",
+    technologies: ["Direction artistique", "3D"],
     description:
       "Une campagne expérimentale qui explore la frontière entre mémoire humaine et intelligence synthétique.",
     image:
@@ -31,7 +31,7 @@ export const defaultProjects: Project[] = [
   {
     id: "project-eveille",
     title: "ÉVEILLÉ//",
-    type: "Motion design · Expérience",
+    technologies: ["Motion design", "Expérience"],
     description:
       "Un générique cinétique construit comme un voyage vers une lumière inconnue.",
     image:

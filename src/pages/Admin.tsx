@@ -3,13 +3,15 @@ import { Link, useNavigate } from "react-router-dom";
 import DataTools from "../components/admin/DataTools";
 import ProjectsManager from "../components/admin/ProjectsManager";
 import SkillsManager from "../components/admin/SkillsManager";
+import TechnologiesManager from "../components/admin/TechnologiesManager";
 import { useAuth } from "../context/AuthContext";
 
-type Tab = "projects" | "skills";
+type Tab = "projects" | "skills" | "technologies";
 
 const tabs: { id: Tab; label: string }[] = [
   { id: "projects", label: "PROJETS" },
   { id: "skills", label: "COMPÉTENCES" },
+  { id: "technologies", label: "TECHNOLOGIES" },
 ];
 
 export default function Admin() {
@@ -31,7 +33,11 @@ export default function Admin() {
               PORTFOLIO / ADMIN
             </p>
             <h1 className="text-4xl font-bold tracking-tight md:text-6xl">
-              {tab === "projects" ? "PROJETS" : "COMPÉTENCES"}
+              {tab === "projects"
+                ? "PROJETS"
+                : tab === "skills"
+                  ? "COMPÉTENCES"
+                  : "TECHNOLOGIES"}
               <span className="text-acid">.</span>
             </h1>
           </div>
@@ -72,7 +78,13 @@ export default function Admin() {
           ))}
         </div>
 
-        {tab === "projects" ? <ProjectsManager /> : <SkillsManager />}
+        {tab === "projects" ? (
+            <ProjectsManager />
+          ) : tab === "skills" ? (
+            <SkillsManager />
+          ) : (
+            <TechnologiesManager />
+          )}
 
         <DataTools />
       </div>

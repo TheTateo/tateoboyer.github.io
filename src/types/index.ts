@@ -17,6 +17,11 @@ export type Skill = {
 
 export type SkillInput = Omit<Skill, "id">;
 
+export type Technology = {
+  id: string;
+  name: string;
+};
+
 /** Format du fichier exporté / importé depuis l'admin. */
 export type PortfolioExport = {
   version: 1;

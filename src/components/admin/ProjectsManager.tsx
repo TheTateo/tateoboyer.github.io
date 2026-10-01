@@ -1,11 +1,12 @@
 import { useState, type ChangeEvent, type FormEvent } from "react";
 import { useProjects } from "../../context/ProjectsContext";
+import { useTechnologies } from "../../context/TechnologiesContext";
 import { formatIndex, getAccentColor, isHexColor } from "../../lib/utils";
 import type { Project, ProjectInput } from "../../types";
 
 const createEmptyForm = (): ProjectInput => ({
   title: "",
-  type: "",
+  technologies: [],
   description: "",
   image: "",
   color: getAccentColor(),
@@ -15,6 +16,7 @@ export default function ProjectsManager() {
   const { projects, addProject, updateProject, deleteProject, moveProject } =
     useProjects();
 
+  const { technologies } = useTechnologies();
   const [form, setForm] = useState<ProjectInput>(createEmptyForm);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [error, setError] = useState("");
@@ -23,6 +25,21 @@ export default function ProjectsManager() {
     setForm(createEmptyForm());
     setEditingId(null);
     setError("");
+  };
+
+  const toggleTechnology = (technologyName: string) => {
+    setForm((current) => {
+      const alreadySelected = current.technologies.includes(technologyName);
+      
+      return {
+        ...current,
+        technologies: alreadySelected
+          ? current.technologies.filter(
+              (technology) => technology !== technologyName,
+          )
+          : [...current.technologies, technologyName],
+      };
+    });
   };
 
   const handleChange = (
@@ -50,14 +67,14 @@ export default function ProjectsManager() {
 
     const input: ProjectInput = {
       title: form.title.trim(),
-      type: form.type.trim(),
+      technologies: form.technologies,
       description: form.description.trim(),
       image: form.image.trim(),
       color: form.color.trim(),
     };
 
-    if (!input.title || !input.type) {
-      setError("Le titre et le type sont obligatoires.");
+    if (!input.title) {
+      setError("Le titre est obligatoires.");
       return;
     }
 
@@ -98,7 +115,9 @@ export default function ProjectsManager() {
               <div className="min-w-0 flex-1 basis-40">
                 <h3 className="truncate font-bold">{project.title}</h3>
                 <p className="mt-1 truncate text-xs text-white/40">
-                  {project.type}
+                  {project.technologies.length > 0
+                    ? project.technologies.join(" . ")
+                    : "Aucune technologie"}
                 </p>
               </div>
 
@@ -179,19 +198,46 @@ export default function ProjectsManager() {
             </div>
 
             <div>
-              <label htmlFor="type" className="field-label">
-                TYPE
+              <label htmlFor="technologies" className="field-label"> 
+                  TECHNOLOGIES
               </label>
-              <input
-                id="type"
-                name="type"
-                type="text"
-                value={form.type}
-                onChange={handleChange}
-                placeholder="Direction artistique · UI/UX"
-                className="field-input"
-              />
+
+              {technologies.length === 0 ? (
+                <div className="border border-dashed border-white/15 px-4 py-5 text-sm text-white/40">
+                  Aucune technologie disponible.
+                  <br />
+                  Ajoute-en d'abord dans l'onglet TECHNOLOGIES.
+                </div>
+              ) : (
+                <div className="flex flex-wrap gap-2">
+                  {technologies.map((technology) => {
+                    const isSelected = form.technologies.includes(technology.name);
+
+                    return (
+                      <button
+                        key={technology.id}
+                        type="button"
+                        onClick={() => toggleTechnology(technology.name)}
+                        className={`border px-3 py-2 text-xs font-bold tracking-[0.08em] transition ${
+                          isSelected
+                            ? "border-acid bg-acid text-ink"
+                            : "border-white/15 text-white/50 hover:border-white/40 hover:text-white"
+                        }`}
+                      >
+                        {technology.name}
+                      </button>
+                    );
+                  })}
+                </div>
+              )}
             </div>
+              {form.technologies.length > 0 && (
+                <p className="mt-3 text-xs text-white/30">
+                  {form.technologies.length} technologie
+                  {form.technologies.length > 1 ? "s" : ""} sélectionnée
+                  {form.technologies.length > 1 ? "s" : ""}.
+                </p>
+              )}
 
             <div>
               <label htmlFor="description" className="field-label">
