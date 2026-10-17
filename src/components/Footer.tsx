@@ -1,12 +1,12 @@
 import { Link } from "react-router-dom";
 import { siteConfig } from "../data/site";
-import { Arrow, Mark } from "./Icons";
+import { Arrow } from "./Icons";
 
 export default function Footer() {
   return (
     <footer className="relative border-t border-white/10 bg-acid px-5 py-24 text-ink md:px-10 md:py-32">
       <div className="footer-symbol" aria-hidden="true">
-        <Mark />
+        <img src="/trois_symboles_exact.svg" alt="" />
       </div>
 
       <div className="relative z-10 mx-auto max-w-[1500px]">

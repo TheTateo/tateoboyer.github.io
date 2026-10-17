@@ -17,6 +17,11 @@ export default function ProjectsManager() {
     useProjects();
 
   const { technologies } = useTechnologies();
+
+  const technologyById = new Map(
+  technologies.map((technology) => [technology.id, technology]),
+  );
+  
   const [form, setForm] = useState<ProjectInput>(createEmptyForm);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [error, setError] = useState("");
@@ -254,7 +259,7 @@ export default function ProjectsManager() {
                 </div>
               )}
             </div>
-            
+
               {form.technologies.length > 0 && (
                 <p className="mt-3 text-xs text-white/30">
                   {form.technologies.length} technologie

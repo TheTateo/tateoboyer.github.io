@@ -7,12 +7,11 @@ export const siteConfig = {
   lastName: "BOYER",
   email: "tateovanai67@gmail.com",
   city: "STRASBOURG, FR",
-  availability: "DISPONIBLE POUR UN STAGE",
-  // Dépose ton CV dans le dossier /public sous le nom cv.pdf
+  availability: "DISPONIBLE POUR UNE ALTERNANCE",
+  // CV disponible dans /public/cv.pdf.
   cvUrl: "/cv.pdf",
-  // TODO : remplace par tes vrais liens
   socials: [
-    { label: "GITHUB", url: "https://github.com/" },
-    { label: "LINKEDIN", url: "https://www.linkedin.com/" },
+    { label: "GITHUB", url: "https://github.com/TheTateo" },
+    { label: "LINKEDIN", url: "https://www.linkedin.com/in/tateo-boyer/" },
   ],
 };

@@ -18,9 +18,28 @@ export default function ProjectsSection({ featuredOnly = false }: ProjectsSectio
   return (
     <section
       id="projets"
-      className="border-y border-white/10 bg-[#0b0e12] py-28 md:py-40"
+      className="relative isolate border-y border-white/10 bg-[#0b0e12] py-28 md:py-40"
     >
-      <div className="mx-auto max-w-[1500px] px-5 md:px-10">
+      <div
+        className="pointer-events-none absolute inset-0 overflow-hidden"
+        aria-hidden="true"
+      >
+        <div
+          className="absolute inset-y-[-8%] right-[-12%] w-[86%] bg-acid opacity-[0.055]"
+          style={{
+            WebkitMaskImage: "url('/symbole_arcaniste.svg')",
+            WebkitMaskPosition: "center right",
+            WebkitMaskRepeat: "no-repeat",
+            WebkitMaskSize: "contain",
+            maskImage: "url('/symbole_arcaniste.svg')",
+            maskPosition: "center right",
+            maskRepeat: "no-repeat",
+            maskSize: "contain",
+          }}
+        />
+      </div>
+
+      <div className="relative z-10 mx-auto max-w-[1500px] px-5 md:px-10">
         <div className="flex flex-col justify-between gap-6 md:flex-row md:items-end">
           <div>
             <p className="eyebrow">

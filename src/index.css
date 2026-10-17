@@ -431,6 +431,71 @@ button {
 .skill-radar::after { width: 1px; height: 100%; }
 .skill-radar svg { width: 55px; color: var(--acid); z-index: 2; }
 
+/* Contacts détectés sur le radar */
+.radar-contact {
+  position: absolute;
+  z-index: 3;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #ff3b30;
+  box-shadow: 0 0 8px #ff3b30, 0 0 18px rgba(255,59,48,.65);
+  opacity: 0;
+  animation: hostile-contact 12s linear infinite;
+}
+
+.contact-one {
+  left: 65%;
+  top: 29%;
+  animation-delay: 0s;
+}
+
+.contact-two {
+  left: 30%;
+  top: 63%;
+  animation-delay: 1.4s;
+}
+
+.contact-three {
+  left: 73%;
+  top: 66%;
+  animation-delay: 2.8s;
+}
+
+.contact-four {
+  left: 42%;
+  top: 23%;
+  animation-delay: 4.2s;
+}
+
+.contact-five {
+  left: 20%;
+  top: 38%;
+  animation-delay: 5.6s;
+}
+
+.contact-six {
+  left: 58%;
+  top: 76%;
+  animation-delay: 7s;
+}
+
+/* Alerte du radar */
+.radar-alert {
+  position: absolute;
+  z-index: 3;
+  bottom: 16%;
+  padding: 5px 8px;
+  border: 1px solid rgba(255,59,48,.35);
+  color: #ff675f;
+  background: rgba(8,10,13,.72);
+  font-size: 7px;
+  font-weight: 700;
+  letter-spacing: .2em;
+  opacity: 0;
+  animation: radar-warning 12s linear infinite;
+}
+
 .radar-ring {
   position: absolute;
   border: 1px solid color-mix(in srgb, var(--acid) 28%, transparent);
@@ -449,6 +514,71 @@ button {
   transform-origin: bottom left;
   background: conic-gradient(from 260deg at 0 100%, color-mix(in srgb, var(--acid) 22%, transparent), transparent 25%);
   animation: sweep 4s linear infinite;
+}
+
+/* En-tête des compétences */
+.capability-group-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 12px;
+  border-bottom: 1px solid color-mix(in srgb, var(--acid) 28%, transparent);
+  color: var(--acid);
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: .22em;
+}
+
+.capability-group-heading span:last-child {
+  color: rgba(255,255,255,.3);
+}
+
+/* Grille des compétences */
+.capability-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  border-bottom: 1px solid rgba(255,255,255,.1);
+}
+
+/* Cartes individuelles */
+.capability-card {
+  display: grid;
+  align-content: space-between;
+  gap: 24px;
+  min-height: 154px;
+  padding: 22px;
+  border-right: 1px solid rgba(255,255,255,.1);
+  border-bottom: 1px solid rgba(255,255,255,.1);
+  transition: padding .3s, border-color .3s, background .3s;
+}
+
+.capability-card:nth-child(even) {
+  border-right: 0;
+}
+
+.capability-card:nth-last-child(-n + 2) {
+  border-bottom: 0;
+}
+
+.capability-card:hover {
+  padding-left: 28px;
+  border-color: color-mix(in srgb, var(--acid) 40%, transparent);
+  background: color-mix(in srgb, var(--acid) 3.5%, transparent);
+}
+
+.capability-index {
+  font: 600 10px "Inter", sans-serif;
+  color: var(--acid);
+  letter-spacing: .15em;
+}
+
+.capability-status {
+  padding: 6px 8px;
+  border: 1px solid color-mix(in srgb, var(--acid) 24%, transparent);
+  color: color-mix(in srgb, var(--acid) 80%, transparent);
+  font-size: 7px;
+  font-weight: 700;
+  letter-spacing: .16em;
 }
 
 .skill-row {
@@ -486,15 +616,18 @@ button {
 
 .footer-symbol {
   position: absolute;
-  right: 3%;
-  top: 4%;
-  opacity: .06;
-  transform: rotate(14deg);
+  top: 50%;
+  left: 50%;
+  width: min(92%, 1400px);
+  transform: translate(-50%, -50%);
+  opacity: .35;
+  pointer-events: none;
 }
 
-.footer-symbol svg {
-  width: 500px;
-  height: 500px;
+.footer-symbol img {
+  display: block;
+  width: 100%;
+  height: auto;
 }
 
 .contact-orbit {
@@ -588,6 +721,54 @@ button {
 @keyframes sweep {
   to { transform: rotate(360deg); }
 }
+@keyframes hostile-contact {
+  0%, 12% {
+    opacity: 0;
+    transform: scale(.4);
+  }
+  16%, 54% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  57% {
+    opacity: .18;
+    transform: scale(.7);
+  }
+  60%, 76% {
+    opacity: 1;
+    transform: scale(1.35);
+  }
+  78% {
+    opacity: .15;
+  }
+  80%, 94% {
+    opacity: 1;
+    transform: scale(1.5);
+  }
+  100% {
+    opacity: 0;
+  }
+}
+@keyframes radar-warning {
+  0%, 55% {
+    opacity: 0;
+    transform: translateY(5px);
+  }
+  60%, 72% {
+    opacity: .9;
+    transform: none;
+  }
+  75% {
+    opacity: .2;
+  }
+  78%, 94% {
+    opacity: 1;
+    transform: none;
+  }
+  100% {
+    opacity: 0;
+  }
+}
 @keyframes pulse {
   50% { opacity: .35; transform: scale(.8) rotate(45deg); }
 }
@@ -611,7 +792,27 @@ button {
   }
   .project-arrow { width: 36px; height: 36px; }
   .project-visual { display: none; }
-  .footer-symbol svg { width: 270px; height: 270px; }
+  .footer-symbol {
+    top: 50%;
+    width: 100%;
+    opacity: .28;
+  }
+
+   .capability-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .capability-card,
+  .capability-card:nth-child(even),
+  .capability-card:nth-last-child(-n + 2) {
+    min-height: 132px;
+    border-right: 0;
+    border-bottom: 1px solid rgba(255,255,255,.1);
+  }
+
+  .capability-card:last-child {
+    border-bottom: 0;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
