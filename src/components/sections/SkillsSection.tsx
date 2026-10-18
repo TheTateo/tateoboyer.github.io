@@ -5,6 +5,10 @@ import { formatIndex } from "../../lib/utils";
 export default function SkillsSection() {
   const { skills, tools } = useSkills();
   const visibleSkills = skills.filter((skill) => skill.name.trim() !== "");
+  const toolRows = Array.from(
+    { length: Math.ceil(tools.length / 3) },
+    (_, rowIndex) => tools.slice(rowIndex * 3, rowIndex * 3 + 3),
+  );
 
   return (
     <section
@@ -88,15 +92,17 @@ export default function SkillsSection() {
                 <span>STACK ACTIVE</span>
               </div>
 
-              <div className="software-grid">
-                {tools.map((tool, index) => (
-                  <div key={tool} className="software-card">
-                    <span className="software-index">
-                      S.{formatIndex(index)}
-                    </span>
-                    <span className="font-display text-lg uppercase tracking-wide">
-                      {tool}
-                    </span>
+              <div className="software-hive">
+                {toolRows.map((row, rowIndex) => (
+                  <div
+                    key={rowIndex}
+                    className={`software-hive-row${row.length < 3 ? " software-hive-row-short" : ""}`}
+                  >
+                    {row.map((tool) => (
+                      <div key={tool} className="software-cell">
+                        <span className="software-cell-name">{tool}</span>
+                      </div>
+                    ))}
                   </div>
                 ))}
               </div>
