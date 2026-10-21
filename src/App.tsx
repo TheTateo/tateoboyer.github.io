@@ -4,6 +4,8 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import { AuthProvider } from "./context/AuthContext";
 import { ProjectsProvider } from "./context/ProjectsContext";
 import { SkillsProvider } from "./context/SkillsContext";
+import { CertificationsProvider } from "./context/CertificationsContext";
+import { TimelineProvider } from "./context/TimelineContext";
 import { TechnologiesProvider } from "./context/TechnologiesContext";
 import About from "./pages/About";
 import Admin from "./pages/Admin";
@@ -13,6 +15,7 @@ import Home from "./pages/Home";
 import NotFound from "./pages/NotFound";
 import Projects from "./pages/Projects";
 import Skills from "./pages/Skills";
+import Timeline from "./pages/Timeline";
 
 export default function App() {
   return (
@@ -20,25 +23,30 @@ export default function App() {
       <AuthProvider>
         <ProjectsProvider>
           <SkillsProvider>
-            <TechnologiesProvider>
-              <Routes>
-                {/* Pages publiques : header + footer communs */}
-                <Route element={<Layout />}>
-                  <Route index element={<Home />} />
-                  <Route path="a-propos" element={<About />} />
-                  <Route path="projets" element={<Projects />} />
-                  <Route path="competences" element={<Skills />} />
-                  <Route path="contact" element={<Contact />} />
-                  <Route path="*" element={<NotFound />} />
-                </Route>
+            <TimelineProvider>
+              <CertificationsProvider>
+                <TechnologiesProvider>
+                  <Routes>
+                    {/* Pages publiques : header + footer communs */}
+                    <Route element={<Layout />}>
+                      <Route index element={<Home />} />
+                      <Route path="a-propos" element={<About />} />
+                      <Route path="projets" element={<Projects />} />
+                      <Route path="competences" element={<Skills />} />
+                      <Route path="parcours" element={<Timeline />} />
+                      <Route path="contact" element={<Contact />} />
+                      <Route path="*" element={<NotFound />} />
+                    </Route>
 
-                {/* Administration */}
-                <Route path="/admin/login" element={<AdminLogin />} />
-                <Route element={<ProtectedRoute />}>
-                  <Route path="/admin" element={<Admin />} />
-                </Route>
-              </Routes>
-            </TechnologiesProvider>
+                    {/* Administration */}
+                    <Route path="/admin/login" element={<AdminLogin />} />
+                    <Route element={<ProtectedRoute />}>
+                      <Route path="/admin" element={<Admin />} />
+                    </Route>
+                  </Routes>
+                </TechnologiesProvider>
+              </CertificationsProvider>
+            </TimelineProvider>
           </SkillsProvider>
         </ProjectsProvider>
       </AuthProvider>

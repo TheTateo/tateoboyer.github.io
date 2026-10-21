@@ -74,12 +74,12 @@ export default function ProfileSection() {
             >
               TÉLÉCHARGER MON CV <Arrow diagonal />
             </a>
-            <a
-              href="#competences"
+            <Link
+              to="/competences"
               className="text-link inline-flex items-center gap-4"
             >
               VOIR MES COMPÉTENCES <Arrow />
-            </a>
+            </Link>
           </div>
         </div>
       </div>

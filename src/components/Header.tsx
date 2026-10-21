@@ -7,6 +7,7 @@ const navItems = [
   { label: "PROFIL", to: "/#profil" },
   { label: "PROJETS", to: "/#projets" },
   { label: "COMPÉTENCES", to: "/#competences" },
+  { label: "PARCOURS", to: "/parcours" },
 ];
 
 const mobileItems = [...navItems, { label: "CONTACT", to: "/contact" }];

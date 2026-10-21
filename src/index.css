@@ -615,23 +615,23 @@ button {
 }
 
 .software-hive {
-  --software-cell-width: 28%;
+  --software-cell-width: 23%;
+  --software-cell-offset: 11.5%;
   padding-top: 1.5rem;
 }
 
 .software-hive-row {
   display: flex;
   gap: 0;
-  margin-bottom: -8%;
+  margin-bottom: -6.5%;
 }
 
 .software-hive-row:nth-child(even) {
-  transform: translateX(14%);
+  transform: translateX(var(--software-cell-offset));
 }
 
 .software-hive-row-short {
-  justify-content: center;
-  transform: none;
+  justify-content: flex-start;
 }
 
 .software-hive-row:last-child {
@@ -680,7 +680,7 @@ button {
   max-width: 82%;
   color: rgba(238, 229, 213, .82);
   font-family: "Rajdhani", sans-serif;
-  font-size: clamp(.62rem, 1vw, .9rem);
+  font-size: clamp(.75rem, 1vw, .95rem);
   font-weight: 600;
   line-height: 1.1;
   letter-spacing: .08em;
@@ -1321,6 +1321,15 @@ button {
     align-self: flex-end;
     gap: 1rem;
     justify-content: flex-end;
+  }
+
+  .software-hive {
+    --software-cell-width: 26%;
+    --software-cell-offset: 13%;
+  }
+
+  .software-cell-name {
+    font-size: clamp(.9rem, 3.5vw, 1rem);
   }
 
   .footer-location {

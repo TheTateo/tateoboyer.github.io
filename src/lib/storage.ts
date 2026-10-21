@@ -8,6 +8,8 @@ export const STORAGE_KEYS = {
   projects: "portfolio-projects", // même clé qu'avant : tes projets existants sont conservés
   skills: "portfolio-skills",
   tools: "portfolio-tools",
+  timeline: "portfolio-timeline",
+  certifications: "portfolio-certifications",
 } as const;
 
 export function readJSON<T>(key: string): T | null {

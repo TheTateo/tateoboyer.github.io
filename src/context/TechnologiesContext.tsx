@@ -5,10 +5,17 @@ import {
   type ReactNode,
 } from "react";
 import type { Technology } from "../types";
-import { defaultTechnologies } from "../data/defaults";
 import { usePersistentState } from "../hooks/usePersistentState";
 
 const TECHNOLOGIES_STORAGE_KEY = "portfolio-technologies";
+const legacyDefaultTechnologies = new Map([
+  ["technology-identite-visuelle", "Identité visuelle"],
+  ["technology-ui-ux", "UI/UX"],
+  ["technology-direction-artistique", "Direction artistique"],
+  ["technology-3d", "3D"],
+  ["technology-motion-design", "Motion design"],
+  ["technology-experience", "Expérience"],
+]);
 
 const normalizeTechnologies = (raw: unknown): Technology[] => {
   if (!Array.isArray(raw)) return [];
@@ -19,6 +26,9 @@ const normalizeTechnologies = (raw: unknown): Technology[] => {
       item !== null &&
       typeof (item as Technology).id === "string" &&
       typeof (item as Technology).name === "string",
+  ).filter(
+    (technology) =>
+      legacyDefaultTechnologies.get(technology.id) !== technology.name,
   );
 };
 
@@ -42,7 +52,7 @@ export function TechnologiesProvider({
 }: TechnologiesProviderProps) {
   const [technologies, setTechnologies] = usePersistentState<Technology[]>(
     TECHNOLOGIES_STORAGE_KEY,
-    defaultTechnologies,
+    [],
     normalizeTechnologies,
   );
 

@@ -9,7 +9,7 @@ import { defaultSkills, defaultTools } from "../data/defaults";
 import { usePersistentState } from "../hooks/usePersistentState";
 import { normalizeSkills, normalizeTools } from "../lib/normalize";
 import { STORAGE_KEYS } from "../lib/storage";
-import { clamp, createId, moveItem } from "../lib/utils";
+import { createId } from "../lib/utils";
 import type { Skill, SkillInput } from "../types";
 
 type SkillsContextValue = {
@@ -18,12 +18,12 @@ type SkillsContextValue = {
   addSkill: (input: SkillInput) => void;
   updateSkill: (id: string, patch: Partial<SkillInput>) => void;
   deleteSkill: (id: string) => void;
-  moveSkill: (id: string, direction: -1 | 1) => void;
   addTool: (name: string) => void;
+  updateTool: (name: string, nextName: string) => void;
   removeTool: (name: string) => void;
   replaceSkills: (skills: Skill[]) => void;
   replaceTools: (tools: string[]) => void;
-  /** Remet compétences ET outils aux valeurs par défaut. */
+  /** Remet les hard skills et les logiciels aux valeurs par défaut. */
   resetSkills: () => void;
 };
 
@@ -43,10 +43,14 @@ export function SkillsProvider({ children }: { children: ReactNode }) {
 
   const addSkill = useCallback(
     (input: SkillInput) => {
-      setSkills((current) => [
-        ...current,
-        { id: createId(), name: input.name, level: clamp(input.level, 0, 100) },
-      ]);
+      const name = input.name.trim();
+      if (!name) return;
+
+      setSkills((current) =>
+        current.some((skill) => skill.name.toLowerCase() === name.toLowerCase())
+          ? current
+          : [...current, { id: createId(), name }],
+      );
     },
     [setSkills],
   );
@@ -56,11 +60,7 @@ export function SkillsProvider({ children }: { children: ReactNode }) {
       setSkills((current) =>
         current.map((skill) =>
           skill.id === id
-            ? {
-                ...skill,
-                ...patch,
-                level: clamp(patch.level ?? skill.level, 0, 100),
-              }
+            ? { ...skill, ...patch, name: patch.name?.trim() ?? skill.name }
             : skill,
         ),
       );
@@ -75,13 +75,6 @@ export function SkillsProvider({ children }: { children: ReactNode }) {
     [setSkills],
   );
 
-  const moveSkill = useCallback(
-    (id: string, direction: -1 | 1) => {
-      setSkills((current) => moveItem(current, id, direction));
-    },
-    [setSkills],
-  );
-
   const addTool = useCallback(
     (name: string) => {
       const trimmed = name.trim();
@@ -91,6 +84,23 @@ export function SkillsProvider({ children }: { children: ReactNode }) {
         current.some((tool) => tool.toLowerCase() === trimmed.toLowerCase())
           ? current
           : [...current, trimmed],
+      );
+    },
+    [setTools],
+  );
+
+  const updateTool = useCallback(
+    (name: string, nextName: string) => {
+      const trimmed = nextName.trim();
+      if (!trimmed) return;
+
+      setTools((current) =>
+        current.some(
+          (tool) =>
+            tool !== name && tool.toLowerCase() === trimmed.toLowerCase(),
+        )
+          ? current
+          : current.map((tool) => (tool === name ? trimmed : tool)),
       );
     },
     [setTools],
@@ -125,8 +135,8 @@ export function SkillsProvider({ children }: { children: ReactNode }) {
       addSkill,
       updateSkill,
       deleteSkill,
-      moveSkill,
       addTool,
+      updateTool,
       removeTool,
       replaceSkills,
       replaceTools,
@@ -138,8 +148,8 @@ export function SkillsProvider({ children }: { children: ReactNode }) {
       addSkill,
       updateSkill,
       deleteSkill,
-      moveSkill,
       addTool,
+      updateTool,
       removeTool,
       replaceSkills,
       replaceTools,

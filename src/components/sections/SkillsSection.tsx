@@ -71,9 +71,6 @@ export default function SkillsSection() {
                   <span className="capability-index">
                     {formatIndex(index)}
                   </span>
-                  <span className="capability-status">
-                    {skill.level}%
-                  </span>
                 </div>
 
                 <div>

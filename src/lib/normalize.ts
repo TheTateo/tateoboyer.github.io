@@ -1,6 +1,17 @@
-import { defaultProjects, defaultSkills, defaultTools } from "../data/defaults";
-import type { Project, Skill } from "../types";
-import { FALLBACK_ACCENT, clamp, isHexColor } from "./utils";
+import {
+  defaultProjects,
+  defaultSkills,
+  defaultTools,
+  defaultCertifications,
+  defaultTimeline,
+} from "../data/defaults";
+import type {
+  CertificationBadge,
+  Project,
+  Skill,
+  TimelineEntry,
+} from "../types";
+import { FALLBACK_ACCENT, isHexColor } from "./utils";
 
 /**
  * Ces fonctions transforment n'importe quelle donnée lue (localStorage ancien format,
@@ -14,6 +25,20 @@ const isRecord = (value: unknown): value is UnknownRecord =>
 
 const asString = (value: unknown): string =>
   typeof value === "string" ? value : "";
+
+const normalizeHttpUrl = (value: unknown): string => {
+  const url = asString(value).trim();
+  if (!url) return "";
+
+  try {
+    const parsed = new URL(url);
+    return parsed.protocol === "http:" || parsed.protocol === "https:"
+      ? url
+      : "";
+  } catch {
+    return "";
+  }
+};
 
 export function normalizeProjects(raw: unknown): Project[] {
   if (!Array.isArray(raw)) return defaultProjects;
@@ -54,14 +79,11 @@ export function normalizeSkills(raw: unknown): Skill[] {
   if (!Array.isArray(raw)) return defaultSkills;
 
   return raw.filter(isRecord).map((item, index): Skill => {
-    const level = Math.round(Number(item.level));
-
     return {
       id: asString(item.id) || `skill-legacy-${index}`,
-      name: asString(item.name),
-      level: Number.isFinite(level) ? clamp(level, 0, 100) : 0,
+      name: asString(item.name).trim(),
     };
-  });
+  }).filter((skill) => skill.name !== "");
 }
 
 export function normalizeTools(raw: unknown): string[] {
@@ -73,4 +95,38 @@ export function normalizeTools(raw: unknown): string[] {
     .filter(Boolean);
 
   return Array.from(new Set(cleaned));
+}
+
+export function normalizeTimeline(raw: unknown): TimelineEntry[] {
+  if (!Array.isArray(raw)) return defaultTimeline;
+
+  return raw
+    .filter(isRecord)
+    .map((item, index): TimelineEntry => ({
+      id: asString(item.id) || `timeline-legacy-${index}`,
+      period: asString(item.period).trim(),
+      title: asString(item.title).trim(),
+      organization: asString(item.organization).trim(),
+      description: asString(item.description).trim(),
+    }))
+    .filter((entry) => entry.period !== "" && entry.title !== "");
+}
+
+export function normalizeCertifications(
+  raw: unknown,
+): CertificationBadge[] {
+  if (!Array.isArray(raw)) return defaultCertifications;
+
+  return raw
+    .filter(isRecord)
+    .map((item, index): CertificationBadge => ({
+      id: asString(item.id) || `certification-legacy-${index}`,
+      type: item.type === "badge" ? "badge" : "certification",
+      title: asString(item.title).trim(),
+      issuer: asString(item.issuer).trim(),
+      date: asString(item.date).trim(),
+      description: asString(item.description).trim(),
+      credentialUrl: normalizeHttpUrl(item.credentialUrl),
+    }))
+    .filter((certification) => certification.title !== "");
 }

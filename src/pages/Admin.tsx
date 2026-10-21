@@ -1,17 +1,26 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import CertificationsManager from "../components/admin/CertificationsManager";
 import DataTools from "../components/admin/DataTools";
 import ProjectsManager from "../components/admin/ProjectsManager";
 import SkillsManager from "../components/admin/SkillsManager";
+import TimelineManager from "../components/admin/TimelineManager";
 import TechnologiesManager from "../components/admin/TechnologiesManager";
 import { useAuth } from "../context/AuthContext";
 
-type Tab = "projects" | "skills" | "technologies";
+type Tab =
+  | "projects"
+  | "skills"
+  | "technologies"
+  | "timeline"
+  | "certifications";
 
 const tabs: { id: Tab; label: string }[] = [
   { id: "projects", label: "PROJETS" },
   { id: "skills", label: "COMPÉTENCES" },
   { id: "technologies", label: "TECHNOLOGIES" },
+  { id: "timeline", label: "PARCOURS" },
+  { id: "certifications", label: "CERTIFICATIONS" },
 ];
 
 export default function Admin() {
@@ -37,7 +46,11 @@ export default function Admin() {
                 ? "PROJETS"
                 : tab === "skills"
                   ? "COMPÉTENCES"
-                  : "TECHNOLOGIES"}
+                  : tab === "technologies"
+                    ? "TECHNOLOGIES"
+                    : tab === "timeline"
+                      ? "PARCOURS"
+                      : "CERTIFICATIONS"}
               <span className="text-acid">.</span>
             </h1>
           </div>
@@ -59,7 +72,11 @@ export default function Admin() {
           </div>
         </header>
 
-        <div className="mb-10 flex gap-2" role="tablist" aria-label="Sections">
+        <div
+          className="mb-10 flex flex-wrap gap-2"
+          role="tablist"
+          aria-label="Sections"
+        >
           {tabs.map((item) => (
             <button
               key={item.id}
@@ -79,12 +96,16 @@ export default function Admin() {
         </div>
 
         {tab === "projects" ? (
-            <ProjectsManager />
-          ) : tab === "skills" ? (
-            <SkillsManager />
-          ) : (
-            <TechnologiesManager />
-          )}
+          <ProjectsManager />
+        ) : tab === "skills" ? (
+          <SkillsManager />
+        ) : tab === "technologies" ? (
+          <TechnologiesManager />
+        ) : tab === "timeline" ? (
+          <TimelineManager />
+        ) : (
+          <CertificationsManager />
+        )}
 
         <DataTools />
       </div>

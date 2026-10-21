@@ -1,6 +1,7 @@
 import ProfileSection from "../components/sections/ProfileSection";
 import ProjectsSection from "../components/sections/ProjectsSection";
 import SkillsSection from "../components/sections/SkillsSection";
+import CertificationsSection from "../components/sections/CertificationsSection";
 import { siteConfig } from "../data/site";
 
 export default function Home() {
@@ -74,6 +75,7 @@ export default function Home() {
       <ProfileSection />
       <ProjectsSection featuredOnly />
       <SkillsSection />
+      <CertificationsSection />
     </>
   );
 }

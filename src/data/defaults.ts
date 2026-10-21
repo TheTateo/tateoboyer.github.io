@@ -1,4 +1,9 @@
-import type { Project, Skill, Technology } from "../types";
+import type {
+  CertificationBadge,
+  Project,
+  Skill,
+  TimelineEntry,
+} from "../types";
 
 /**
  * Données affichées tant que rien n'a été enregistré dans le navigateur.
@@ -11,10 +16,7 @@ export const defaultProjects: Project[] = [
   {
     id: "project-humain-orbital",
     title: "HUMAIN//ORBITAL",
-    technologies: [
-      "technology-identite-visuelle",
-      "technology-ui-ux",
-    ],
+    technologies: ["Identité visuelle", "UI/UX"],
     description:
       "Une expérience spatiale immersive où l'interface devient un instrument de navigation.",
     image:
@@ -24,10 +26,7 @@ export const defaultProjects: Project[] = [
   {
     id: "project-exo-mind",
     title: "EXO//MIND",
-    technologies: [
-      "technology-direction-artistique",
-      "technology-3d",
-    ],
+    technologies: ["Direction artistique", "3D"],
     description:
       "Une campagne expérimentale qui explore la frontière entre mémoire humaine et intelligence synthétique.",
     image:
@@ -37,10 +36,7 @@ export const defaultProjects: Project[] = [
   {
     id: "project-eveille",
     title: "ÉVEILLÉ//",
-    technologies: [
-      "technology-motion-design",
-      "technology-experience",
-    ],
+    technologies: ["Motion design", "Expérience"],
     description:
       "Un générique cinétique construit comme un voyage vers une lumière inconnue.",
     image:
@@ -49,38 +45,11 @@ export const defaultProjects: Project[] = [
   },
 ];
 
-export const defaultTechnologies: Technology[] = [
-  {
-    id: "technology-identite-visuelle",
-    name: "Identité visuelle",
-  },
-  {
-    id: "technology-ui-ux",
-    name: "UI/UX",
-  },
-  {
-    id: "technology-direction-artistique",
-    name: "Direction artistique",
-  },
-  {
-    id: "technology-3d",
-    name: "3D",
-  },
-  {
-    id: "technology-motion-design",
-    name: "Motion design",
-  },
-  {
-    id: "technology-experience",
-    name: "Expérience",
-  },
-];
-
 export const defaultSkills: Skill[] = [
-  { id: "skill-art-direction", name: "Direction artistique", level: 92 },
-  { id: "skill-ui-ux", name: "UI / UX Design", level: 88 },
-  { id: "skill-motion", name: "Motion Design", level: 76 },
-  { id: "skill-creative-dev", name: "Développement créatif", level: 68 },
+  { id: "skill-art-direction", name: "Direction artistique" },
+  { id: "skill-ui-ux", name: "UI / UX Design" },
+  { id: "skill-motion", name: "Motion Design" },
+  { id: "skill-creative-dev", name: "Développement créatif" },
 ];
 
 export const defaultTools: string[] = [
@@ -91,3 +60,7 @@ export const defaultTools: string[] = [
   "React",
   "WebGL",
 ];
+
+export const defaultTimeline: TimelineEntry[] = [];
+
+export const defaultCertifications: CertificationBadge[] = [];

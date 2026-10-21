@@ -1,9 +1,13 @@
 import { useRef, useState, type ChangeEvent } from "react";
 import { useProjects } from "../../context/ProjectsContext";
 import { useSkills } from "../../context/SkillsContext";
+import { useCertifications } from "../../context/CertificationsContext";
+import { useTimeline } from "../../context/TimelineContext";
 import {
+  normalizeCertifications,
   normalizeProjects,
   normalizeSkills,
+  normalizeTimeline,
   normalizeTools,
 } from "../../lib/normalize";
 import type { PortfolioExport } from "../../types";
@@ -12,12 +16,25 @@ export default function DataTools() {
   const { projects, replaceProjects, resetProjects } = useProjects();
   const { skills, tools, replaceSkills, replaceTools, resetSkills } =
     useSkills();
+  const { entries, replaceEntries, resetEntries } = useTimeline();
+  const {
+    certifications,
+    replaceCertifications,
+    resetCertifications,
+  } = useCertifications();
 
   const fileInput = useRef<HTMLInputElement>(null);
   const [message, setMessage] = useState("");
 
   const handleExport = () => {
-    const payload: PortfolioExport = { version: 1, projects, skills, tools };
+    const payload: PortfolioExport = {
+      version: 1,
+      projects,
+      skills,
+      tools,
+      timeline: entries,
+      certifications,
+    };
     const blob = new Blob([JSON.stringify(payload, null, 2)], {
       type: "application/json",
     });
@@ -43,14 +60,24 @@ export default function DataTools() {
       }
 
       const record = data as Record<string, unknown>;
-      const hasKnownKey = ["projects", "skills", "tools"].some(
-        (key) => key in record,
-      );
+      const hasKnownKey = [
+        "projects",
+        "skills",
+        "tools",
+        "timeline",
+        "certifications",
+      ].some((key) => key in record);
       if (!hasKnownKey) throw new Error("Aucune donnée reconnue");
 
       if ("projects" in record) replaceProjects(normalizeProjects(record.projects));
       if ("skills" in record) replaceSkills(normalizeSkills(record.skills));
       if ("tools" in record) replaceTools(normalizeTools(record.tools));
+      if ("timeline" in record) {
+        replaceEntries(normalizeTimeline(record.timeline));
+      }
+      if ("certifications" in record) {
+        replaceCertifications(normalizeCertifications(record.certifications));
+      }
 
       setMessage("Import réussi : les données ont été remplacées.");
     } catch {
@@ -61,13 +88,15 @@ export default function DataTools() {
   const handleReset = () => {
     if (
       !window.confirm(
-        "Remettre les projets, compétences et outils aux valeurs par défaut ?",
+        "Remettre les projets, hard skills, logiciels, parcours et certifications aux valeurs par défaut ?",
       )
     ) {
       return;
     }
     resetProjects();
     resetSkills();
+    resetEntries();
+    resetCertifications();
     setMessage("Données réinitialisées.");
   };
 
