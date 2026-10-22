@@ -57,6 +57,7 @@ export type PortfolioExport = {
   technologies: Technology[];
   skills: Skill[];
   tools: string[];
+  aiNames: string[];
   timeline: TimelineEntry[];
   certifications: CertificationBadge[];
   skillCategories: string[];

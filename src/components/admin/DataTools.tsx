@@ -6,6 +6,7 @@ import { useTimeline } from "../../context/TimelineContext";
 import { normalizeTechnologies, useTechnologies } from "../../context/TechnologiesContext";
 import {
   normalizeCertifications,
+  normalizeAINames,
   normalizeProjects,
   normalizeSkills,
   normalizeSkillCategories,
@@ -20,9 +21,11 @@ export default function DataTools() {
     skills,
     categories,
     tools,
+    aiNames,
     replaceSkills,
     replaceCategories,
     replaceTools,
+    replaceAINames,
     resetSkills,
   } =
     useSkills();
@@ -45,6 +48,7 @@ export default function DataTools() {
       skills,
       skillCategories: categories,
       tools,
+      aiNames,
       timeline: entries,
       certifications,
     };
@@ -79,6 +83,7 @@ export default function DataTools() {
         "skills",
         "skillCategories",
         "tools",
+        "aiNames",
         "timeline",
         "certifications",
       ].some((key) => key in record);
@@ -103,6 +108,7 @@ export default function DataTools() {
         replaceCategories(normalizeSkillCategories(record.skillCategories));
       }
       if ("tools" in record) replaceTools(normalizeTools(record.tools));
+      if ("aiNames" in record) replaceAINames(normalizeAINames(record.aiNames));
       if ("timeline" in record) {
         replaceEntries(normalizeTimeline(record.timeline));
       }
@@ -135,7 +141,7 @@ export default function DataTools() {
   return (
     <section className="mt-16 border-t border-white/10 pt-10">
       <p className="mb-2 text-xs tracking-[0.2em] text-white/40">DONNÉES</p>
-      <h2 className="mb-3 text-2xl font-bold">SAUVEGARDE</h2>
+      <h2 className="mb-3 text-xl font-bold">SAUVEGARDE</h2>
       <p className="mb-6 max-w-2xl text-sm leading-6 text-white/45">
         Tes modifications sont stockées dans ce navigateur uniquement : les
         visiteurs ne les voient pas. Exporte-les pour les sauvegarder, les

@@ -13,13 +13,13 @@ export default function TechnologiesManager() {
   };
 
   return (
-    <section className="space-y-8">
+    <section className="space-y-6">
       <div>
         <p className="mb-2 text-xs tracking-[0.25em] text-white/40">
           BIBLIOTHÈQUE
         </p>
 
-        <h2 className="text-2xl font-bold tracking-tight">
+        <h2 className="text-xl font-bold tracking-tight">
           TECHNOLOGIES
           <span className="text-acid">.</span>
         </h2>
@@ -41,13 +41,13 @@ export default function TechnologiesManager() {
             }
           }}
           placeholder="Ex. React, UI/UX, bash..."
-          className="min-h-12 flex-1 border border-white/15 bg-white/5 px-4 text-sm outline-none transition placeholder:text-white/25 focus:border-acid"
+          className="min-h-10 flex-1 border border-white/15 bg-white/5 px-4 text-sm outline-none transition placeholder:text-white/25 focus:border-acid"
         />
 
         <button
           type="button"
           onClick={handleAdd}
-          className="min-h-12 bg-acid px-6 text-xs font-bold tracking-[0.15em] text-ink transition hover:bg-white"
+          className="min-h-10 bg-acid px-6 text-xs font-bold tracking-[0.15em] text-ink transition hover:bg-white"
         >
           AJOUTER
         </button>

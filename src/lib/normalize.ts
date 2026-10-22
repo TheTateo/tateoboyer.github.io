@@ -90,7 +90,9 @@ export function normalizeSkills(raw: unknown): Skill[] {
     return {
       id: asString(item.id) || `skill-legacy-${index}`,
       name: asString(item.name).trim(),
-      category: asString(item.category).trim() || "Autres",
+      category: asString(item.category).trim() === "Autres"
+        ? ""
+        : asString(item.category).trim(),
     };
   }).filter((skill) => skill.name !== "");
 }
@@ -103,7 +105,7 @@ export function normalizeSkillCategories(raw: unknown): string[] {
     .map((category) => category.trim())
     .filter(Boolean);
 
-  return Array.from(new Set([...categories, "Autres"]));
+  return Array.from(new Set(categories.filter((category) => category !== "Autres")));
 }
 
 export function normalizeTools(raw: unknown): string[] {
@@ -115,6 +117,17 @@ export function normalizeTools(raw: unknown): string[] {
     .filter(Boolean);
 
   return Array.from(new Set(cleaned));
+}
+
+export function normalizeAINames(raw: unknown): string[] {
+  if (!Array.isArray(raw)) return [];
+
+  const names = raw
+    .filter((name): name is string => typeof name === "string")
+    .map((name) => name.trim())
+    .filter(Boolean);
+
+  return Array.from(new Set(names));
 }
 
 export function normalizeTimeline(raw: unknown): TimelineEntry[] {

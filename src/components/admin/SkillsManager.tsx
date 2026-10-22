@@ -6,6 +6,7 @@ export default function SkillsManager() {
     skills,
     categories,
     tools,
+    aiNames,
     addSkill,
     updateSkill,
     deleteSkill,
@@ -15,20 +16,24 @@ export default function SkillsManager() {
     addTool,
     updateTool,
     removeTool,
+    addAIName,
+    updateAIName,
+    removeAIName,
   } = useSkills();
 
   const [newSkill, setNewSkill] = useState("");
-  const [newSkillCategory, setNewSkillCategory] = useState("Autres");
+  const [newSkillCategory, setNewSkillCategory] = useState("");
   const [newCategory, setNewCategory] = useState("");
   const [editingCategory, setEditingCategory] = useState<string | null>(null);
   const [editedCategoryName, setEditedCategoryName] = useState("");
   const [newTool, setNewTool] = useState("");
+  const [newAIName, setNewAIName] = useState("");
 
   const handleAddSkill = (event: FormEvent) => {
     event.preventDefault();
     addSkill({
       name: newSkill,
-      category: newSkillCategory.trim() || "Autres",
+      category: newSkillCategory.trim(),
     });
     setNewSkill("");
   };
@@ -53,14 +58,20 @@ export default function SkillsManager() {
     setNewTool("");
   };
 
+  const handleAddAIName = (event: FormEvent) => {
+    event.preventDefault();
+    addAIName(newAIName);
+    setNewAIName("");
+  };
+
   return (
-    <div className="grid gap-12 lg:grid-cols-2">
-      <section className="space-y-8">
+    <div className="grid gap-8 lg:grid-cols-2">
+      <section className="space-y-6">
         <div>
           <p className="mb-2 text-xs tracking-[0.25em] text-white/40">
             {skills.length} ÉLÉMENT{skills.length > 1 ? "S" : ""}
           </p>
-          <h2 className="text-2xl font-bold tracking-tight">
+          <h2 className="text-xl font-bold tracking-tight">
             HARD SKILLS<span className="text-acid">.</span>
           </h2>
           <p className="mt-2 max-w-2xl text-sm leading-relaxed text-white/50">
@@ -75,14 +86,15 @@ export default function SkillsManager() {
             onChange={(event) => setNewSkill(event.target.value)}
             placeholder="Ex. Direction artistique"
             aria-label="Nom du hard skill à ajouter"
-            className="min-h-12 flex-1 border border-white/15 bg-white/5 px-4 text-sm outline-none transition placeholder:text-white/25 focus:border-acid"
+            className="min-h-10 flex-1 border border-white/15 bg-white/5 px-4 text-sm outline-none transition placeholder:text-white/25 focus:border-acid"
           />
           <select
             value={newSkillCategory}
             onChange={(event) => setNewSkillCategory(event.target.value)}
             aria-label="Catégorie du hard skill"
-            className="min-h-12 border border-white/15 bg-white/5 px-4 text-sm outline-none transition placeholder:text-white/25 focus:border-acid"
+            className="min-h-10 border border-white/15 bg-white/5 px-4 text-sm outline-none transition placeholder:text-white/25 focus:border-acid"
           >
+            <option value="">Sans catégorie</option>
             {categories.map((category) => (
               <option key={category} value={category}>
                 {category}
@@ -91,7 +103,7 @@ export default function SkillsManager() {
           </select>
           <button
             type="submit"
-            className="min-h-12 bg-acid px-6 text-xs font-bold tracking-[0.15em] text-ink transition hover:bg-white"
+            className="min-h-10 bg-acid px-6 text-xs font-bold tracking-[0.15em] text-ink transition hover:bg-white"
           >
             AJOUTER
           </button>
@@ -129,7 +141,7 @@ export default function SkillsManager() {
           <div className="grid gap-2 sm:grid-cols-2">
             {categories.map((category) => {
               const skillCount = skills.filter(
-                (skill) => (skill.category || "Autres") === category,
+                (skill) => skill.category === category,
               ).length;
 
               return (
@@ -189,7 +201,7 @@ export default function SkillsManager() {
                       ZONE DE DÉPÔT
                     </p>
                   </div>
-                  {category !== "Autres" && editingCategory !== category && (
+                  {editingCategory !== category && (
                     <button
                       type="button"
                       onClick={() => {
@@ -202,7 +214,7 @@ export default function SkillsManager() {
                       MODIFIER
                     </button>
                   )}
-                  {category !== "Autres" && editingCategory !== category && (
+                  {editingCategory !== category && (
                     <button
                       type="button"
                       onClick={() => deleteCategory(category)}
@@ -256,13 +268,14 @@ export default function SkillsManager() {
                   </button>
                 </div>
                 <select
-                  value={skill.category || "Autres"}
+                  value={skill.category}
                   onChange={(event) =>
                     updateSkill(skill.id, { category: event.target.value })
                   }
                   aria-label={`Catégorie de ${skill.name}`}
                   className="mt-3 w-full border-t border-white/10 bg-transparent pt-3 text-xs text-white/55 outline-none focus:border-acid"
                 >
+                  <option value="">Sans catégorie</option>
                   {categories.map((category) => (
                     <option key={category} value={category}>
                       {category}
@@ -275,16 +288,16 @@ export default function SkillsManager() {
         )}
       </section>
 
-      <section className="space-y-8">
+      <section className="space-y-6">
         <div>
           <p className="mb-2 text-xs tracking-[0.25em] text-white/40">
             {tools.length} LOGICIEL{tools.length > 1 ? "S" : ""}
           </p>
-          <h2 className="text-2xl font-bold tracking-tight">
+          <h2 className="text-xl font-bold tracking-tight">
             LOGICIELS<span className="text-acid">.</span>
           </h2>
           <p className="mt-2 max-w-2xl text-sm leading-relaxed text-white/50">
-            Gère les logiciels présentés dans la grille de compétences.
+            Gere les logiciels affiches dans la grille de competences.
           </p>
         </div>
 
@@ -295,11 +308,11 @@ export default function SkillsManager() {
             onChange={(event) => setNewTool(event.target.value)}
             placeholder="Ex. Figma"
             aria-label="Nom du logiciel à ajouter"
-            className="min-h-12 flex-1 border border-white/15 bg-white/5 px-4 text-sm outline-none transition placeholder:text-white/25 focus:border-acid"
+            className="min-h-10 flex-1 border border-white/15 bg-white/5 px-4 text-sm outline-none transition placeholder:text-white/25 focus:border-acid"
           />
           <button
             type="submit"
-            className="min-h-12 bg-acid px-6 text-xs font-bold tracking-[0.15em] text-ink transition hover:bg-white"
+            className="min-h-10 bg-acid px-6 text-xs font-bold tracking-[0.15em] text-ink transition hover:bg-white"
           >
             AJOUTER
           </button>
@@ -337,6 +350,66 @@ export default function SkillsManager() {
                     SUPPR.
                   </button>
                 </div>
+              </div>
+            ))}
+          </div>
+        )}
+      </section>
+
+      <section className="space-y-6 lg:col-span-2">
+        <div>
+          <p className="mb-2 text-xs tracking-[0.25em] text-white/40">
+            {aiNames.length} POINT{aiNames.length > 1 ? "S" : ""} RADAR
+          </p>
+          <h2 className="text-xl font-bold tracking-tight">
+            INTELLIGENCES ARTIFICIELLES<span className="text-acid">.</span>
+          </h2>
+          <p className="mt-2 max-w-2xl text-sm leading-relaxed text-white/50">
+            Chaque nom ajoute un point au radar des compétences. Survole un point pour afficher son IA.
+          </p>
+        </div>
+
+        <form onSubmit={handleAddAIName} className="flex flex-col gap-3 sm:flex-row">
+          <input
+            type="text"
+            value={newAIName}
+            onChange={(event) => setNewAIName(event.target.value)}
+            placeholder="Ex. ChatGPT"
+            aria-label="Nom de l'intelligence artificielle à ajouter"
+            className="min-h-10 flex-1 border border-white/15 bg-white/5 px-4 text-sm outline-none transition placeholder:text-white/25 focus:border-acid"
+          />
+          <button
+            type="submit"
+            className="min-h-10 bg-acid px-6 text-xs font-bold tracking-[0.15em] text-ink transition hover:bg-white"
+          >
+            AJOUTER
+          </button>
+        </form>
+
+        {aiNames.length === 0 ? (
+          <div className="border border-dashed border-white/15 px-6 py-8 text-center">
+            <p className="text-sm text-white/40">Aucune IA ajoutée au radar.</p>
+          </div>
+        ) : (
+          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+            {aiNames.map((aiName, index) => (
+              <div key={`${aiName}-${index}`} className="flex items-center gap-3 border border-acid/25 bg-acid/[0.04] p-4">
+                <span className="text-xs text-acid">{String(index + 1).padStart(2, "0")}</span>
+                <input
+                  type="text"
+                  value={aiName}
+                  onChange={(event) => updateAIName(aiName, event.target.value)}
+                  aria-label={`Nom de l'IA ${aiName}`}
+                  className="min-w-0 flex-1 bg-transparent text-sm outline-none"
+                />
+                <button
+                  type="button"
+                  onClick={() => removeAIName(aiName)}
+                  aria-label={`Supprimer l'IA ${aiName}`}
+                  className="shrink-0 text-xs text-white/30 transition hover:text-red-400"
+                >
+                  SUPPR.
+                </button>
               </div>
             ))}
           </div>

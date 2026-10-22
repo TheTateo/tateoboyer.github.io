@@ -35,7 +35,7 @@ export default function ProfileSection() {
                 alt={`Portrait de ${siteConfig.firstName}`}
                 className="h-full w-full object-cover"
               />
-              <div className="absolute inset-0 bg-black/20" />
+              <div className="absolute inset-0 bg-black/45" />
               <span className="absolute bottom-5 left-5 z-10">
                 ARCHIVE PERSONNELLE
               </span>

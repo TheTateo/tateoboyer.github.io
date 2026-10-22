@@ -34,14 +34,14 @@ export default function Admin() {
   };
 
   return (
-    <main className="min-h-screen bg-ink px-5 py-10 text-white md:px-10 md:py-16">
-      <div className="mx-auto max-w-[1500px]">
-        <header className="mb-10 flex flex-wrap items-center justify-between gap-6 border-b border-white/10 pb-6">
+    <main className="admin-shell min-h-screen bg-ink px-6 py-8 text-white md:px-12 md:py-10 lg:px-16">
+      <div className="mx-auto max-w-[1240px]">
+        <header className="mb-8 flex flex-wrap items-center justify-between gap-5 border-b border-white/10 pb-5">
           <div>
             <p className="mb-2 text-xs tracking-[0.25em] text-white/40">
               PORTFOLIO / ADMIN
             </p>
-            <h1 className="text-4xl font-bold tracking-tight md:text-6xl">
+            <h1 className="text-3xl font-bold tracking-tight md:text-4xl">
               {tab === "projects"
                 ? "PROJETS"
                 : tab === "skills"
@@ -73,7 +73,7 @@ export default function Admin() {
         </header>
 
         <div
-          className="mb-10 flex flex-wrap gap-2"
+          className="mb-8 flex flex-wrap gap-2"
           role="tablist"
           aria-label="Sections"
         >
@@ -84,7 +84,7 @@ export default function Admin() {
               role="tab"
               aria-selected={tab === item.id}
               onClick={() => setTab(item.id)}
-              className={`px-5 py-3 text-xs font-bold tracking-[0.15em] transition ${
+              className={`px-4 py-2.5 text-xs font-bold tracking-[0.15em] transition ${
                 tab === item.id
                   ? "bg-acid text-ink"
                   : "border border-white/15 text-white/60 hover:text-white"

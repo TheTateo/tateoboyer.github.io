@@ -171,12 +171,12 @@ export default function ProjectsManager() {
   };
 
   return (
-    <div className="grid gap-12 lg:grid-cols-[1fr_420px]">
+    <div className="grid gap-8 lg:grid-cols-[1fr_420px]">
       <section>
         <p className="mb-2 text-xs tracking-[0.2em] text-white/40">
           {projects.length} PROJET{projects.length > 1 ? "S" : ""}
         </p>
-        <h2 className="mb-6 text-2xl font-bold">PROJETS EXISTANTS</h2>
+        <h2 className="mb-6 text-xl font-bold">PROJETS EXISTANTS</h2>
 
         <div className="divide-y divide-white/10 border-y border-white/10">
           {projects.map((project, index) => (
@@ -251,11 +251,11 @@ export default function ProjectsManager() {
       </section>
 
       <section>
-        <div className="border border-white/10 p-6 md:p-8">
+        <div className="border border-white/10 p-5 md:p-6">
           <p className="mb-2 text-xs tracking-[0.2em] text-white/40">
             {editingId ? "ÉDITION" : "NOUVEAU"}
           </p>
-          <h2 className="mb-8 text-2xl font-bold">
+          <h2 className="mb-5 text-xl font-bold">
             {editingId ? "MODIFIER LE PROJET" : "AJOUTER UN PROJET"}
           </h2>
 

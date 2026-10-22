@@ -9,6 +9,7 @@ export const STORAGE_KEYS = {
   skills: "portfolio-skills",
   skillCategories: "portfolio-skill-categories",
   tools: "portfolio-tools",
+  aiNames: "portfolio-ai-names",
   timeline: "portfolio-timeline",
   certifications: "portfolio-certifications",
 } as const;

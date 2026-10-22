@@ -4,12 +4,14 @@ import { formatIndex } from "../../lib/utils";
 import { useState } from "react";
 
 export default function SkillsSection() {
-  const { skills, tools } = useSkills();
+  const { skills, tools, aiNames } = useSkills();
   const visibleSkills = skills.filter((skill) => skill.name.trim() !== "");
+  const uncategorizedLabel = "Sans catégorie";
   const skillCategories = Array.from(
-    new Set(visibleSkills.map((skill) => skill.category || "Autres")),
+    new Set(visibleSkills.map((skill) => skill.category || uncategorizedLabel)),
   );
   const [activeCategoryIndex, setActiveCategoryIndex] = useState(0);
+  const [activeAI, setActiveAI] = useState<string | null>(null);
   const activeCategory = skillCategories[activeCategoryIndex];
   const toolRows = Array.from(
     { length: Math.ceil(tools.length / 3) },
@@ -27,20 +29,44 @@ export default function SkillsSection() {
           <p className="eyebrow">MON ARSENAL DE</p>
           <h2 className="section-title mt-4">COMPÉTENCES.</h2>
 
-          <div className="skill-radar mt-12" aria-hidden="true">
+          <div className="skill-radar mt-12">
             <div className="radar-ring ring-one" />
             <div className="radar-ring ring-two" />
             <div className="radar-ring ring-three" />
             <div className="radar-sweep" />
 
-            {["contact-one",
-              "contact-two",
-              "contact-three",
-              "contact-four",
-              "contact-five",
-              "contact-six"].map((contact) => (
-                <span key={contact} className={`radar-contact ${contact}`} /> ))}
-                <div className="radar-alert">HOSTILITÉS DÉTECTÉS</div>
+            {aiNames.map((aiName, index) => {
+              const contact = ["contact-one", "contact-two", "contact-three", "contact-four", "contact-five", "contact-six"][index];
+              const angle = index * 137.5 * (Math.PI / 180);
+              const radius = 28 + Math.floor(index / 12) * 7;
+              const position = index >= 6
+                ? {
+                    left: `${50 + Math.cos(angle) * radius}%`,
+                    top: `${50 + Math.sin(angle) * radius}%`,
+                  }
+                : undefined;
+
+              return (
+                <button
+                  key={`${aiName}-${index}`}
+                  type="button"
+                  className={`radar-contact ${contact ?? ""}`}
+                  style={position}
+                  aria-label={`Afficher ${aiName}`}
+                  onMouseEnter={() => setActiveAI(aiName)}
+                  onMouseLeave={() => setActiveAI(null)}
+                  onFocus={() => setActiveAI(aiName)}
+                  onBlur={() => setActiveAI(null)}
+                />
+              );
+            })}
+            {activeAI ? (
+              <div className="radar-contact-label" aria-live="polite">
+                IA D&#201;TECT&#201;E <span>{activeAI}</span>
+              </div>
+            ) : (
+              <div className="radar-alert">HOSTILIT&#201; D&#201;TECT&#201;E</div>
+            )}
 
             <Mark />
           </div>
@@ -58,7 +84,7 @@ export default function SkillsSection() {
           <div className="space-y-8">
             {skillCategories.filter((category) => category === activeCategory).map((category) => {
               const categorySkills = visibleSkills.filter(
-                (skill) => (skill.category || "Autres") === category,
+                (skill) => (skill.category || uncategorizedLabel) === category,
               );
 
               return (

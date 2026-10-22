@@ -467,6 +467,9 @@ button {
 .radar-contact {
   position: absolute;
   z-index: 3;
+  padding: 0;
+  border: 0;
+  cursor: crosshair;
   width: 6px;
   height: 6px;
   border-radius: 50%;
@@ -474,6 +477,44 @@ button {
   box-shadow: 0 0 8px #ff3b30, 0 0 18px rgba(255,59,48,.65);
   opacity: 0;
   animation: hostile-contact 12s linear infinite;
+}
+
+.radar-contact:hover,
+.radar-contact:focus-visible {
+  z-index: 5;
+  animation: none;
+  opacity: 1;
+  transform: scale(1.6);
+  outline: none;
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--acid) 25%, transparent), 0 0 12px var(--acid), 0 0 24px color-mix(in srgb, var(--acid) 70%, transparent);
+}
+
+.radar-contact-label {
+  position: absolute;
+  z-index: 4;
+  right: auto;
+  bottom: 11%;
+  left: 50%;
+  max-width: 72%;
+  padding: 6px 9px;
+  border: 1px solid color-mix(in srgb, var(--acid) 45%, transparent);
+  background: rgba(8, 10, 13, .88);
+  color: color-mix(in srgb, var(--acid) 75%, white);
+  font-size: 7px;
+  font-weight: 700;
+  letter-spacing: .16em;
+  text-align: center;
+  text-transform: uppercase;
+  pointer-events: none;
+  transform: translateX(-50%);
+}
+
+.radar-contact-label span {
+  display: block;
+  margin-top: 2px;
+  color: #f3eff5;
+  font-size: 10px;
+  letter-spacing: .08em;
 }
 
 .contact-one {
@@ -1606,6 +1647,69 @@ button {
 
 
 /* --- Formulaires (contact, login admin, admin) --------------------------- */
+.admin-shell h1 {
+  font-size: clamp(2rem, 3vw, 2.5rem);
+  line-height: 1;
+}
+
+.admin-shell h2.text-xl {
+  font-size: 1.2rem;
+  line-height: 1.25;
+}
+
+.admin-shell .text-sm {
+  font-size: .8125rem;
+  line-height: 1.45;
+}
+
+.admin-shell .text-xs {
+  font-size: .6875rem;
+  line-height: 1.4;
+}
+
+.admin-shell input:not([type="checkbox"]):not([type="file"]),
+.admin-shell select,
+.admin-shell textarea {
+  font-size: .8125rem;
+}
+
+.admin-shell select {
+  min-height: 2.5rem;
+  appearance: none;
+  padding: .6rem 2.5rem .6rem .85rem;
+  border: 1px solid rgba(255, 255, 255, .16);
+  color: #f3eff5;
+  color-scheme: dark;
+  background-color: #111016;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='m1 1 5 5 5-5' fill='none' stroke='%23ac3acf' stroke-width='1.5'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right .9rem center;
+  cursor: pointer;
+  transition: border-color .2s, box-shadow .2s, background-color .2s;
+}
+
+.admin-shell select:hover {
+  border-color: color-mix(in srgb, var(--acid) 65%, transparent);
+}
+
+.admin-shell select:focus-visible {
+  border-color: var(--acid);
+  outline: none;
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--acid) 20%, transparent);
+}
+
+.admin-shell select option {
+  color: #f3eff5;
+  background: #111016;
+}
+
+.admin-shell select option:hover,
+.admin-shell select option:focus,
+.admin-shell select option:checked {
+  color: #fff;
+  background: #572267;
+}
+
 .field-label {
   display: block;
   margin-bottom: .5rem;

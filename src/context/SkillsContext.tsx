@@ -13,6 +13,7 @@ import {
 import { usePersistentState } from "../hooks/usePersistentState";
 import {
   normalizeSkillCategories,
+  normalizeAINames,
   normalizeSkills,
   normalizeTools,
 } from "../lib/normalize";
@@ -24,6 +25,7 @@ type SkillsContextValue = {
   skills: Skill[];
   categories: string[];
   tools: string[];
+  aiNames: string[];
   addSkill: (input: SkillInput) => void;
   updateSkill: (id: string, patch: Partial<SkillInput>) => void;
   deleteSkill: (id: string) => void;
@@ -33,9 +35,13 @@ type SkillsContextValue = {
   addTool: (name: string) => void;
   updateTool: (name: string, nextName: string) => void;
   removeTool: (name: string) => void;
+  addAIName: (name: string) => void;
+  updateAIName: (name: string, nextName: string) => void;
+  removeAIName: (name: string) => void;
   replaceSkills: (skills: Skill[]) => void;
   replaceCategories: (categories: string[]) => void;
   replaceTools: (tools: string[]) => void;
+  replaceAINames: (names: string[]) => void;
   /** Remet les hard skills et les logiciels aux valeurs par défaut. */
   resetSkills: () => void;
 };
@@ -53,6 +59,11 @@ export function SkillsProvider({ children }: { children: ReactNode }) {
     defaultTools,
     normalizeTools,
   );
+  const [aiNames, setAINames] = usePersistentState<string[]>(
+    STORAGE_KEYS.aiNames,
+    [],
+    normalizeAINames,
+  );
   const [storedCategories, setStoredCategories] = usePersistentState<string[]>(
     STORAGE_KEYS.skillCategories,
     defaultSkillCategories,
@@ -62,7 +73,6 @@ export function SkillsProvider({ children }: { children: ReactNode }) {
     new Set([
       ...storedCategories,
       ...skills.map((skill) => skill.category.trim()).filter(Boolean),
-      "Autres",
     ]),
   );
 
@@ -70,7 +80,7 @@ export function SkillsProvider({ children }: { children: ReactNode }) {
     (input: SkillInput) => {
       const name = input.name.trim();
       if (!name) return;
-      const category = input.category.trim() || "Autres";
+      const category = input.category.trim();
 
       setSkills((current) =>
         current.some((skill) => skill.name.toLowerCase() === name.toLowerCase())
@@ -124,14 +134,12 @@ export function SkillsProvider({ children }: { children: ReactNode }) {
 
   const deleteCategory = useCallback(
     (name: string) => {
-      if (name === "Autres") return;
-
       setStoredCategories((current) =>
         current.filter((category) => category !== name),
       );
       setSkills((current) =>
         current.map((skill) =>
-          skill.category === name ? { ...skill, category: "Autres" } : skill,
+          skill.category === name ? { ...skill, category: "" } : skill,
         ),
       );
     },
@@ -141,7 +149,7 @@ export function SkillsProvider({ children }: { children: ReactNode }) {
   const renameCategory = useCallback(
     (name: string, nextName: string) => {
       const trimmed = nextName.trim();
-      if (!trimmed || name === "Autres") return;
+      if (!trimmed) return;
 
       const duplicate = categories.some(
         (category) =>
@@ -199,6 +207,43 @@ export function SkillsProvider({ children }: { children: ReactNode }) {
     [setTools],
   );
 
+  const addAIName = useCallback(
+    (name: string) => {
+      const trimmed = name.trim();
+      if (!trimmed) return;
+
+      setAINames((current) =>
+        current.some((item) => item.toLowerCase() === trimmed.toLowerCase())
+          ? current
+          : [...current, trimmed],
+      );
+    },
+    [setAINames],
+  );
+
+  const updateAIName = useCallback(
+    (name: string, nextName: string) => {
+      const trimmed = nextName.trim();
+      if (!trimmed) return;
+
+      setAINames((current) =>
+        current.some(
+          (item) => item !== name && item.toLowerCase() === trimmed.toLowerCase(),
+        )
+          ? current
+          : current.map((item) => (item === name ? trimmed : item)),
+      );
+    },
+    [setAINames],
+  );
+
+  const removeAIName = useCallback(
+    (name: string) => {
+      setAINames((current) => current.filter((item) => item !== name));
+    },
+    [setAINames],
+  );
+
   const replaceSkills = useCallback(
     (next: Skill[]) => setSkills(next),
     [setSkills],
@@ -214,17 +259,24 @@ export function SkillsProvider({ children }: { children: ReactNode }) {
     [setTools],
   );
 
+  const replaceAINames = useCallback(
+    (next: string[]) => setAINames(normalizeAINames(next)),
+    [setAINames],
+  );
+
   const resetSkills = useCallback(() => {
     setSkills(defaultSkills);
     setTools(defaultTools);
+    setAINames([]);
     setStoredCategories(defaultSkillCategories);
-  }, [setSkills, setTools, setStoredCategories]);
+  }, [setSkills, setTools, setAINames, setStoredCategories]);
 
   const value = useMemo(
     () => ({
       skills,
       categories,
       tools,
+      aiNames,
       addSkill,
       updateSkill,
       deleteSkill,
@@ -234,15 +286,20 @@ export function SkillsProvider({ children }: { children: ReactNode }) {
       addTool,
       updateTool,
       removeTool,
+      addAIName,
+      updateAIName,
+      removeAIName,
       replaceSkills,
       replaceCategories,
       replaceTools,
+      replaceAINames,
       resetSkills,
     }),
     [
       skills,
       categories,
       tools,
+      aiNames,
       addSkill,
       updateSkill,
       deleteSkill,
@@ -252,9 +309,13 @@ export function SkillsProvider({ children }: { children: ReactNode }) {
       addTool,
       updateTool,
       removeTool,
+      addAIName,
+      updateAIName,
+      removeAIName,
       replaceSkills,
       replaceCategories,
       replaceTools,
+      replaceAINames,
       resetSkills,
     ],
   );
