@@ -18,6 +18,7 @@ export default function ProjectsSection({ featuredOnly = false }: ProjectsSectio
   return (
     <section
       id="projets"
+      data-scroll-reveal
       className="relative isolate border-y border-white/10 bg-[#0b0e12] py-28 md:py-40"
     >
       <div
@@ -39,7 +40,7 @@ export default function ProjectsSection({ featuredOnly = false }: ProjectsSectio
         />
       </div>
 
-      <div className="relative z-10 mx-auto max-w-[1500px] px-5 md:px-10">
+      <div className="relative z-10 mx-auto max-w-[1240px] px-5 md:px-10">
         <div className="flex flex-col justify-between gap-6 md:flex-row md:items-end">
           <div>
             <p className="eyebrow">
@@ -50,8 +51,7 @@ export default function ProjectsSection({ featuredOnly = false }: ProjectsSectio
             <h2 className="section-title mt-4">PROJETS.</h2>
           </div>
           <p className="max-w-sm text-sm leading-6 text-white/45">
-            Une sélection de projets scolaires et personnels à la croisée du
-            design, du mouvement et du code.
+            Une sélection de projets scolaires et personnels
           </p>
         </div>
 

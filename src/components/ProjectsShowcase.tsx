@@ -42,17 +42,19 @@ export default function ProjectsShowcase({ projects }: ProjectsShowcaseProps) {
             </span>
 
             <div className="relative z-10 text-left">
-              <h3 className="font-display text-[clamp(2.5rem,7vw,6.6rem)] leading-none tracking-[-0.04em]">
+              <h3 className="font-display text-[clamp(2.5rem,5.5vw,5.5rem)] leading-none tracking-[-0.04em]">
                 {project.title}
               </h3>
               {project.technologies.length > 0 && (
                 <div className="mt-4 flex max-w-full gap-2 overflow-x-auto pb-1">
-                  {project.technologies.map((technology) => (
-                    <span
-                      key={technology}
-                      className="shrink-0 border border-white/15 px-3 py-2 text-[10px] font-semibold uppercase tracking-[0.15em] text-white/50"
-                    >
-                      {technology}
+                  {project.technologies.map((technology, index) => (
+                    <span key={technology} className="flex shrink-0 items-center gap-2">
+                      {index > 0 && (
+                        <span aria-hidden="true" className="text-acid">·</span>
+                      )}
+                      <span className="text-[10px] font-semibold uppercase tracking-[0.15em] text-white/50">
+                        {technology}
+                      </span>
                     </span>
                   ))}
                 </div>

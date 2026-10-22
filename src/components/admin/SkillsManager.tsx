@@ -4,22 +4,47 @@ import { useSkills } from "../../context/SkillsContext";
 export default function SkillsManager() {
   const {
     skills,
+    categories,
     tools,
     addSkill,
     updateSkill,
     deleteSkill,
+    addCategory,
+    renameCategory,
+    deleteCategory,
     addTool,
     updateTool,
     removeTool,
   } = useSkills();
 
   const [newSkill, setNewSkill] = useState("");
+  const [newSkillCategory, setNewSkillCategory] = useState("Autres");
+  const [newCategory, setNewCategory] = useState("");
+  const [editingCategory, setEditingCategory] = useState<string | null>(null);
+  const [editedCategoryName, setEditedCategoryName] = useState("");
   const [newTool, setNewTool] = useState("");
 
   const handleAddSkill = (event: FormEvent) => {
     event.preventDefault();
-    addSkill({ name: newSkill });
+    addSkill({
+      name: newSkill,
+      category: newSkillCategory.trim() || "Autres",
+    });
     setNewSkill("");
+  };
+
+  const handleAddCategory = (event: FormEvent) => {
+    event.preventDefault();
+    addCategory(newCategory);
+    setNewCategory("");
+  };
+
+  const handleRenameCategory = (event: FormEvent) => {
+    event.preventDefault();
+    if (!editingCategory) return;
+    renameCategory(editingCategory, editedCategoryName);
+    setEditingCategory(null);
+    setEditedCategoryName("");
   };
 
   const handleAddTool = (event: FormEvent) => {
@@ -43,7 +68,7 @@ export default function SkillsManager() {
           </p>
         </div>
 
-        <form onSubmit={handleAddSkill} className="flex flex-col gap-3 sm:flex-row">
+        <form onSubmit={handleAddSkill} className="grid gap-3 sm:grid-cols-[1fr_1fr_auto]">
           <input
             type="text"
             value={newSkill}
@@ -52,6 +77,18 @@ export default function SkillsManager() {
             aria-label="Nom du hard skill à ajouter"
             className="min-h-12 flex-1 border border-white/15 bg-white/5 px-4 text-sm outline-none transition placeholder:text-white/25 focus:border-acid"
           />
+          <select
+            value={newSkillCategory}
+            onChange={(event) => setNewSkillCategory(event.target.value)}
+            aria-label="Catégorie du hard skill"
+            className="min-h-12 border border-white/15 bg-white/5 px-4 text-sm outline-none transition placeholder:text-white/25 focus:border-acid"
+          >
+            {categories.map((category) => (
+              <option key={category} value={category}>
+                {category}
+              </option>
+            ))}
+          </select>
           <button
             type="submit"
             className="min-h-12 bg-acid px-6 text-xs font-bold tracking-[0.15em] text-ink transition hover:bg-white"
@@ -59,6 +96,127 @@ export default function SkillsManager() {
             AJOUTER
           </button>
         </form>
+
+        <div className="space-y-4 border-y border-white/10 py-6">
+          <div>
+            <h3 className="text-sm font-bold tracking-[0.15em] text-white/75">
+              CATÉGORIES
+            </h3>
+            <p className="mt-1 text-xs leading-relaxed text-white/40">
+              Dépose une compétence sur une catégorie pour la classer, ou
+              utilise son sélecteur.
+            </p>
+          </div>
+          <form
+            onSubmit={handleAddCategory}
+            className="flex flex-col gap-3 sm:flex-row"
+          >
+            <input
+              type="text"
+              value={newCategory}
+              onChange={(event) => setNewCategory(event.target.value)}
+              placeholder="Nouvelle catégorie"
+              aria-label="Nom de la nouvelle catégorie"
+              className="min-h-11 flex-1 border border-white/15 bg-white/5 px-4 text-sm outline-none transition placeholder:text-white/25 focus:border-acid"
+            />
+            <button
+              type="submit"
+              className="min-h-11 border border-acid/50 px-5 text-xs font-bold tracking-[0.15em] text-acid transition hover:bg-acid hover:text-ink"
+            >
+              CRÉER
+            </button>
+          </form>
+          <div className="grid gap-2 sm:grid-cols-2">
+            {categories.map((category) => {
+              const skillCount = skills.filter(
+                (skill) => (skill.category || "Autres") === category,
+              ).length;
+
+              return (
+                <div
+                  key={category}
+                  onDragOver={(event) => {
+                    event.preventDefault();
+                    event.dataTransfer.dropEffect = "move";
+                  }}
+                  onDrop={(event) => {
+                    event.preventDefault();
+                    const skillId = event.dataTransfer.getData("text/plain");
+                    if (skillId) updateSkill(skillId, { category });
+                  }}
+                  className="flex min-h-16 items-center justify-between gap-3 border border-acid/25 bg-acid/[0.04] p-3 transition hover:border-acid/70 hover:bg-acid/[0.08]"
+                >
+                  <div className="min-w-0">
+                    {editingCategory === category ? (
+                      <form
+                        onSubmit={handleRenameCategory}
+                        className="flex items-center gap-2"
+                      >
+                        <input
+                          autoFocus
+                          type="text"
+                          value={editedCategoryName}
+                          onChange={(event) =>
+                            setEditedCategoryName(event.target.value)
+                          }
+                          aria-label={`Nouveau nom pour ${category}`}
+                          className="min-w-0 w-full border-b border-acid/50 bg-transparent py-1 text-sm text-white outline-none focus:border-acid"
+                        />
+                        <button
+                          type="submit"
+                          className="shrink-0 text-[10px] font-bold text-acid hover:text-white"
+                        >
+                          OK
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setEditingCategory(null);
+                            setEditedCategoryName("");
+                          }}
+                          className="shrink-0 text-[10px] text-white/40 hover:text-white"
+                        >
+                          ANNULER
+                        </button>
+                      </form>
+                    ) : (
+                      <p className="truncate text-sm font-semibold text-white/80">
+                        {category}
+                      </p>
+                    )}
+                    <p className="mt-1 text-[10px] tracking-[0.12em] text-white/35">
+                      {skillCount} COMPÉTENCE{skillCount === 1 ? "" : "S"} ·
+                      ZONE DE DÉPÔT
+                    </p>
+                  </div>
+                  {category !== "Autres" && editingCategory !== category && (
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setEditingCategory(category);
+                        setEditedCategoryName(category);
+                      }}
+                      aria-label={`Modifier le nom de ${category}`}
+                      className="shrink-0 px-2 py-1 text-[10px] font-bold tracking-wide text-white/40 transition hover:text-acid"
+                    >
+                      MODIFIER
+                    </button>
+                  )}
+                  {category !== "Autres" && editingCategory !== category && (
+                    <button
+                      type="button"
+                      onClick={() => deleteCategory(category)}
+                      aria-label={`Supprimer la catégorie ${category}`}
+                      className="shrink-0 px-2 py-1 text-[10px] font-bold tracking-wide text-white/35 transition hover:text-red-400"
+                    >
+                      SUPPR.
+                    </button>
+                  )}
+                </div>
+              );
+            })}
+          </div>
+        </div>
 
         {skills.length === 0 ? (
           <div className="border border-dashed border-white/15 px-6 py-10 text-center">
@@ -71,7 +229,12 @@ export default function SkillsManager() {
             {skills.map((skill) => (
               <div
                 key={skill.id}
-                className="border border-white/10 bg-white/[0.03] p-4"
+                draggable
+                onDragStart={(event) => {
+                  event.dataTransfer.setData("text/plain", skill.id);
+                  event.dataTransfer.effectAllowed = "move";
+                }}
+                className="cursor-grab border border-white/10 bg-white/[0.03] p-4 active:cursor-grabbing"
               >
                 <div className="flex items-center gap-3">
                   <input
@@ -92,6 +255,20 @@ export default function SkillsManager() {
                     SUPPR.
                   </button>
                 </div>
+                <select
+                  value={skill.category || "Autres"}
+                  onChange={(event) =>
+                    updateSkill(skill.id, { category: event.target.value })
+                  }
+                  aria-label={`Catégorie de ${skill.name}`}
+                  className="mt-3 w-full border-t border-white/10 bg-transparent pt-3 text-xs text-white/55 outline-none focus:border-acid"
+                >
+                  {categories.map((category) => (
+                    <option key={category} value={category}>
+                      {category}
+                    </option>
+                  ))}
+                </select>
               </div>
             ))}
           </div>

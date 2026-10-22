@@ -3,10 +3,12 @@ import { useProjects } from "../../context/ProjectsContext";
 import { useSkills } from "../../context/SkillsContext";
 import { useCertifications } from "../../context/CertificationsContext";
 import { useTimeline } from "../../context/TimelineContext";
+import { normalizeTechnologies, useTechnologies } from "../../context/TechnologiesContext";
 import {
   normalizeCertifications,
   normalizeProjects,
   normalizeSkills,
+  normalizeSkillCategories,
   normalizeTimeline,
   normalizeTools,
 } from "../../lib/normalize";
@@ -14,9 +16,18 @@ import type { PortfolioExport } from "../../types";
 
 export default function DataTools() {
   const { projects, replaceProjects, resetProjects } = useProjects();
-  const { skills, tools, replaceSkills, replaceTools, resetSkills } =
+  const {
+    skills,
+    categories,
+    tools,
+    replaceSkills,
+    replaceCategories,
+    replaceTools,
+    resetSkills,
+  } =
     useSkills();
   const { entries, replaceEntries, resetEntries } = useTimeline();
+  const { technologies, replaceTechnologies } = useTechnologies();
   const {
     certifications,
     replaceCertifications,
@@ -30,7 +41,9 @@ export default function DataTools() {
     const payload: PortfolioExport = {
       version: 1,
       projects,
+      technologies,
       skills,
+      skillCategories: categories,
       tools,
       timeline: entries,
       certifications,
@@ -62,15 +75,33 @@ export default function DataTools() {
       const record = data as Record<string, unknown>;
       const hasKnownKey = [
         "projects",
+        "technologies",
         "skills",
+        "skillCategories",
         "tools",
         "timeline",
         "certifications",
       ].some((key) => key in record);
       if (!hasKnownKey) throw new Error("Aucune donnée reconnue");
 
-      if ("projects" in record) replaceProjects(normalizeProjects(record.projects));
+      const importedProjects = "projects" in record
+        ? normalizeProjects(record.projects)
+        : null;
+      if (importedProjects) replaceProjects(importedProjects);
+      if ("technologies" in record) {
+        replaceTechnologies(normalizeTechnologies(record.technologies));
+      } else if (importedProjects) {
+        const names = Array.from(
+          new Set(importedProjects.flatMap((project) => project.technologies)),
+        );
+        replaceTechnologies(
+          names.map((name, index) => ({ id: `imported-technology-${index}`, name })),
+        );
+      }
       if ("skills" in record) replaceSkills(normalizeSkills(record.skills));
+      if ("skillCategories" in record) {
+        replaceCategories(normalizeSkillCategories(record.skillCategories));
+      }
       if ("tools" in record) replaceTools(normalizeTools(record.tools));
       if ("timeline" in record) {
         replaceEntries(normalizeTimeline(record.timeline));
@@ -97,6 +128,7 @@ export default function DataTools() {
     resetSkills();
     resetEntries();
     resetCertifications();
+    replaceTechnologies([]);
     setMessage("Données réinitialisées.");
   };
 
@@ -107,8 +139,7 @@ export default function DataTools() {
       <p className="mb-6 max-w-2xl text-sm leading-6 text-white/45">
         Tes modifications sont stockées dans ce navigateur uniquement : les
         visiteurs ne les voient pas. Exporte-les pour les sauvegarder, les
-        transférer sur un autre appareil ou les recopier dans{" "}
-        <code>src/data/defaults.ts</code>.
+        transférer sur un autre appareil.
       </p>
 
       <div className="flex flex-wrap gap-3">

@@ -8,7 +8,11 @@ const createEmptyForm = (): ProjectInput => ({
   title: "",
   technologies: [],
   description: "",
+  contributorCount: undefined,
+  startDate: "",
+  endDate: "",
   image: "",
+  imageSource: "url",
   color: getAccentColor(),
 });
 
@@ -77,9 +81,38 @@ export default function ProjectsManager() {
     setForm((current) => ({ ...current, [name]: value }));
   };
 
+  const handleImageFile = (event: ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+    if (!file.type.startsWith("image/")) {
+      setError("Choisis un fichier image.");
+      event.target.value = "";
+      return;
+    }
+    if (file.size > 2 * 1024 * 1024) {
+      setError("L’image doit faire 2 Mo maximum pour être enregistrée dans le navigateur.");
+      event.target.value = "";
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = () => {
+      if (typeof reader.result === "string") {
+        setForm((current) => ({ ...current, image: reader.result as string }));
+        setError("");
+      }
+    };
+    reader.onerror = () => setError("Impossible de lire cette image.");
+    reader.readAsDataURL(file);
+  };
+
   const startEdit = (project: Project) => {
     const { id, ...values } = project;
-    setForm(values);
+    setForm({
+      ...values,
+      imageSource:
+        values.imageSource ?? (values.image.startsWith("data:") ? "upload" : "url"),
+    });
     setEditingId(id);
     setError("");
   };
@@ -97,7 +130,11 @@ export default function ProjectsManager() {
       title: form.title.trim(),
       technologies: form.technologies,
       description: form.description.trim(),
+      contributorCount: form.contributorCount,
+      startDate: form.startDate?.trim() ?? "",
+      endDate: form.endDate?.trim() ?? "",
       image: form.image.trim(),
+      imageSource: form.imageSource ?? "url",
       color: form.color.trim(),
     };
 
@@ -108,6 +145,19 @@ export default function ProjectsManager() {
 
     if (!isHexColor(input.color)) {
       setError("La couleur doit être au format #RRGGBB (ex. #ac3acf).");
+      return;
+    }
+
+    if (
+      input.contributorCount !== undefined &&
+      (!Number.isInteger(input.contributorCount) || input.contributorCount < 1)
+    ) {
+      setError("Le nombre de contributeurs doit être un entier positif.");
+      return;
+    }
+
+    if (input.startDate && input.endDate && input.endDate < input.startDate) {
+      setError("La date de fin doit être postérieure à la date de début.");
       return;
     }
 
@@ -319,18 +369,109 @@ export default function ProjectsManager() {
             </div>
 
             <div>
-              <label htmlFor="image" className="field-label">
-                URL DE L&apos;IMAGE
+              <label htmlFor="contributorCount" className="field-label">
+                NOMBRE DE CONTRIBUTEURS (OPTIONNEL)
               </label>
               <input
-                id="image"
-                name="image"
-                type="url"
-                value={form.image}
-                onChange={handleChange}
-                placeholder="https://…"
+                id="contributorCount"
+                name="contributorCount"
+                type="number"
+                min="1"
+                step="1"
+                value={form.contributorCount ?? ""}
+                onChange={(event) =>
+                  setForm((current) => ({
+                    ...current,
+                    contributorCount: event.target.value
+                      ? Number(event.target.value)
+                      : undefined,
+                  }))
+                }
+                placeholder="Ex. 3"
                 className="field-input"
               />
+            </div>
+
+            <div className="grid gap-4 sm:grid-cols-2">
+              <div>
+                <label htmlFor="startDate" className="field-label">
+                  DATE DE DÉBUT (OPTIONNELLE)
+                </label>
+                <input
+                  id="startDate"
+                  name="startDate"
+                  type="date"
+                  value={form.startDate ?? ""}
+                  onChange={handleChange}
+                  className="field-input"
+                />
+              </div>
+              <div>
+                <label htmlFor="endDate" className="field-label">
+                  DATE DE FIN (OPTIONNELLE)
+                </label>
+                <input
+                  id="endDate"
+                  name="endDate"
+                  type="date"
+                  value={form.endDate ?? ""}
+                  onChange={handleChange}
+                  className="field-input"
+                />
+              </div>
+            </div>
+
+            <div>
+              <p className="field-label">IMAGE DU PROJET</p>
+              <div className="mb-3 flex gap-2">
+                {(["url", "upload"] as const).map((source) => (
+                  <button
+                    key={source}
+                    type="button"
+                    aria-pressed={(form.imageSource ?? "url") === source}
+                    onClick={() => {
+                      setForm((current) => ({ ...current, imageSource: source, image: "" }));
+                      setError("");
+                    }}
+                    className={`border px-3 py-2 text-xs font-bold tracking-[0.08em] transition ${
+                      (form.imageSource ?? "url") === source
+                        ? "border-acid bg-acid text-ink"
+                        : "border-white/15 text-white/50 hover:border-white/40 hover:text-white"
+                    }`}
+                  >
+                    {source === "url" ? "URL" : "FICHIER DE L’APPAREIL"}
+                  </button>
+                ))}
+              </div>
+              {(form.imageSource ?? "url") === "url" ? (
+                <>
+                  <label htmlFor="image" className="sr-only">URL de l’image</label>
+                  <input
+                    id="image"
+                    name="image"
+                    type="url"
+                    value={form.image.startsWith("data:") ? "" : form.image}
+                    onChange={handleChange}
+                    placeholder="https://…"
+                    className="field-input"
+                  />
+                </>
+              ) : (
+                <>
+                  <label htmlFor="image-file" className="sr-only">Choisir une image</label>
+                  <input
+                    id="image-file"
+                    type="file"
+                    accept="image/*"
+                    onChange={handleImageFile}
+                    className="field-input file:mr-3 file:border-0 file:bg-acid file:px-3 file:py-2 file:font-bold file:text-ink"
+                  />
+                  <p className="mt-2 text-xs text-white/35">Image enregistrée dans ce navigateur, 2 Mo maximum.</p>
+                </>
+              )}
+              {form.image && (
+                <img src={form.image} alt="Aperçu de l’image du projet" className="mt-3 h-28 w-full object-cover" />
+              )}
             </div>
 
             <div>

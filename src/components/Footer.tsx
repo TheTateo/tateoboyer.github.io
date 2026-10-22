@@ -54,7 +54,7 @@ export default function Footer() {
         </div>
       </div>
 
-      <div className="footer-content relative z-10 mx-auto max-w-[1500px]">
+      <div className="footer-content relative z-10 mx-auto max-w-[1240px]">
         <p className="text-[10px] font-bold tracking-[0.3em]">PROCHAINE MISSION</p>
 
         <div className="mt-5 flex flex-col items-start justify-between gap-10 lg:flex-row lg:items-end">
@@ -65,7 +65,7 @@ export default function Footer() {
             <Link
               to="/admin"
               aria-label="Administration"
-              className="ml-1 inline-block text-white/20 transition-all duration-300 hover:text-acid"
+              className="ml-1 inline-flex size-8 items-center justify-center align-middle text-[0.2em] leading-none text-white/[0.12] transition-colors duration-300 hover:text-white/25 focus-visible:text-acid focus-visible:outline focus-visible:outline-1 focus-visible:outline-acid"
             >
               .
             </Link>

@@ -6,7 +6,8 @@ export default function ProfileSection() {
   return (
     <section
       id="profil"
-      className="relative mx-auto max-w-[1500px] overflow-hidden px-5 pb-28 pt-36 md:px-10 md:pb-40 md:pt-48"
+      data-scroll-reveal
+      className="relative mx-auto max-w-[1240px] overflow-hidden px-5 pb-28 pt-36 md:px-10 md:pb-40 md:pt-48"
     >
       <div
         className="absolute inset-y-[-8%] right-[-12%] w-[86%] bg-acid opacity-[0.055]"

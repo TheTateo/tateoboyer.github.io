@@ -1,10 +1,16 @@
 import { Mark } from "../Icons";
 import { useSkills } from "../../context/SkillsContext";
 import { formatIndex } from "../../lib/utils";
+import { useState } from "react";
 
 export default function SkillsSection() {
   const { skills, tools } = useSkills();
   const visibleSkills = skills.filter((skill) => skill.name.trim() !== "");
+  const skillCategories = Array.from(
+    new Set(visibleSkills.map((skill) => skill.category || "Autres")),
+  );
+  const [activeCategoryIndex, setActiveCategoryIndex] = useState(0);
+  const activeCategory = skillCategories[activeCategoryIndex];
   const toolRows = Array.from(
     { length: Math.ceil(tools.length / 3) },
     (_, rowIndex) => tools.slice(rowIndex * 3, rowIndex * 3 + 3),
@@ -13,27 +19,9 @@ export default function SkillsSection() {
   return (
     <section
       id="competences"
-      className="relative isolate mx-auto max-w-[1500px] overflow-hidden px-5 pb-28 pt-36 md:px-10 md:pb-40 md:pt-48"
+      data-scroll-reveal
+      className="relative isolate mx-auto max-w-[1240px] overflow-hidden px-5 pb-28 pt-36 md:px-10 md:pb-40 md:pt-48"
     >
-      <div
-        className="pointer-events-none absolute inset-0"
-        aria-hidden="true"
-      >
-        <div
-          className="absolute inset-y-[-8%] left-[-12%] w-[86%] bg-acid opacity-[0.055]"
-          style={{
-            WebkitMaskImage: "url('/symbole_titan.svg')",
-            WebkitMaskPosition: "center left",
-            WebkitMaskRepeat: "no-repeat",
-            WebkitMaskSize: "contain",
-            maskImage: "url('/symbole_titan.svg')",
-            maskPosition: "center left",
-            maskRepeat: "no-repeat",
-            maskSize: "contain",
-          }}
-        />
-      </div>
-
       <div className="relative z-10 grid gap-16 lg:grid-cols-2 lg:gap-28">
         <div>
           <p className="eyebrow">MON ARSENAL DE</p>
@@ -61,25 +49,49 @@ export default function SkillsSection() {
         <div className="self-end">
           <div className="capability-group-heading">
             <span>HARD SKILLS</span>
-            <span>{formatIndex(visibleSkills.length)} DOMAINES</span>
+                        <div className="category-navigation" aria-label="Navigation des categories">
+              <button type="button" aria-label="Categorie precedente" disabled={skillCategories.length < 2} onClick={() => setActiveCategoryIndex((index) => (index - 1 + skillCategories.length) % skillCategories.length)}>{"←"}</button>
+              <button type="button" aria-label="Categorie suivante" disabled={skillCategories.length < 2} onClick={() => setActiveCategoryIndex((index) => (index + 1) % skillCategories.length)}>{"→"}</button>
+            </div>
           </div>
 
-          <div className="capability-grid">
-            {visibleSkills.map((skill, index) => (
-              <div key={skill.id} className="capability-card">
-                <div className="flex items-center justify-between gap-4">
-                  <span className="capability-index">
-                    {formatIndex(index)}
-                  </span>
-                </div>
+          <div className="space-y-8">
+            {skillCategories.filter((category) => category === activeCategory).map((category) => {
+              const categorySkills = visibleSkills.filter(
+                (skill) => (skill.category || "Autres") === category,
+              );
 
-                <div>
-                  <span className="font-display text-xl uppercase tracking-wide md:text-2xl">
-                    {skill.name}
-                  </span>
-                </div>
-              </div>
-            ))}
+              return (
+                <section key={category}>
+                  <div className="mb-3 flex items-center justify-between gap-4">
+                    <h3 className="font-display text-lg font-semibold uppercase tracking-wide text-white/70">
+                      {category}
+                    </h3>
+                    <span className="text-[10px] tracking-[0.15em] text-white/30">
+                      {formatIndex(categorySkills.length)} COMPÉTENCE
+                      {categorySkills.length > 1 ? "S" : ""}
+                    </span>
+                  </div>
+                  <div className="capability-grid">
+                    {categorySkills.map((skill) => (
+                      <div key={skill.id} className="capability-card">
+                        <div className="flex items-center justify-between gap-4">
+                          <span className="capability-index">
+                            {formatIndex(visibleSkills.indexOf(skill))}
+                          </span>
+                        </div>
+
+                        <div>
+                          <span className="break-words font-display text-base uppercase tracking-wide sm:text-lg lg:text-xl">
+                            {skill.name}
+                          </span>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </section>
+              );
+            })}
           </div>
 
           {tools.length > 0 && (

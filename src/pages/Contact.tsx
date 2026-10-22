@@ -79,7 +79,7 @@ export default function Contact() {
   };
 
   return (
-    <section className="mx-auto max-w-[1500px] px-5 pb-28 pt-36 md:px-10 md:pb-40 md:pt-48">
+    <section className="mx-auto max-w-[1240px] px-5 pb-28 pt-36 md:px-10 md:pb-40 md:pt-48">
       <div className="section-index">04 / TRANSMISSION</div>
 
       <div className="mt-12 grid gap-16 lg:grid-cols-[.8fr_1.2fr] lg:gap-24">

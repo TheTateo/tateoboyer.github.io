@@ -3,7 +3,7 @@ import { Arrow } from "../components/Icons";
 
 export default function NotFound() {
   return (
-    <section className="mx-auto flex min-h-screen max-w-[1500px] flex-col justify-center px-5 pb-20 pt-32 md:px-10">
+    <section className="mx-auto flex min-h-screen max-w-[1240px] flex-col justify-center px-5 pb-20 pt-32 md:px-10">
       <p className="eyebrow">ERREUR 404</p>
       <h1 className="section-title mt-5">
         PAGE

@@ -3,47 +3,60 @@ import ProjectsSection from "../components/sections/ProjectsSection";
 import SkillsSection from "../components/sections/SkillsSection";
 import CertificationsSection from "../components/sections/CertificationsSection";
 import { siteConfig } from "../data/site";
+import { useEffect } from "react";
 
 export default function Home() {
+  useEffect(() => {
+    const sections = document.querySelectorAll<HTMLElement>("[data-scroll-reveal]");
+    const showAll = () => sections.forEach((section) => section.classList.add("scroll-revealed"));
+
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches || !("IntersectionObserver" in window)) {
+      showAll();
+      return;
+    }
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        entry.target.classList.toggle("scroll-revealed", entry.isIntersecting);
+      });
+    }, { threshold: 0 });
+
+    sections.forEach((section) => {
+      section.classList.add("scroll-reveal-pending");
+      observer.observe(section);
+    });
+
+    return () => observer.disconnect();
+  }, []);
+
   return (
     <>
       <section className="hero-grid relative flex min-h-screen items-end pt-28">
-        <div className="hero-image absolute inset-0" aria-hidden="true" />
-        <div className="absolute inset-0 bg-[linear-gradient(90deg,#080a0d_0%,rgba(8,10,13,.88)_34%,rgba(8,10,13,.1)_72%),linear-gradient(0deg,#080a0d_0%,transparent_55%)]" />
-        <div className="orb orb-one" aria-hidden="true" />
-        <div className="orb orb-two" aria-hidden="true" />
+        <div className="hero-visual absolute inset-0" aria-hidden="true">
+          <div className="hero-image absolute inset-0" />
+          <div className="hero-overlay absolute inset-0" />
+        </div>
 
-        <div className="relative z-10 mx-auto grid w-full max-w-[1500px] grid-cols-1 items-end gap-10 px-5 pb-14 md:px-10 lg:grid-cols-[1.35fr_.65fr] lg:pb-20">
+        <div className="relative z-10 mx-auto grid w-full max-w-[1240px] grid-cols-1 items-end gap-10 px-5 pb-14 md:px-10 lg:pb-20 2xl:px-14">
           <div>
             <div className="reveal flex items-center gap-3 text-[10px] font-bold tracking-[0.32em] text-acid">
               <span className="h-px w-9 bg-current" />
               SIGNAL ÉTABLI — {siteConfig.city}
             </div>
 
-            <h1 className="reveal-delay font-display mt-7 max-w-5xl text-[clamp(4.5rem,11vw,10rem)] font-medium uppercase leading-[0.72] tracking-[-0.055em]">
-              DESIGNER
-              <span className="outline-text block pl-[7vw]">D&apos;AUTRES</span>
+            <h1 className="reveal-delay font-display mt-7 max-w-5xl text-[clamp(4.5rem,9vw,8rem)] font-medium uppercase leading-[0.72] tracking-[-0.055em]">
+              BIENVENUE
+              <span className="outline-text block pl-[7vw]">DANS</span>
               <span className="block">
-                MONDES<span className="text-acid">.</span>
+                MON UNIVERS<span className="text-acid">.</span>
               </span>
             </h1>
 
-            <p className="mt-9 max-w-md border-l border-acid pl-5 text-sm leading-7 text-white/55 md:ml-[7vw]">
-              Étudiant en design numérique. Je transforme des idées en
-              expériences visuelles, interactives et légèrement venues
-              d&apos;ailleurs.
-            </p>
-          </div>
-
-          <div className="hidden justify-self-end lg:block">
-            <div className="hud-card">
-              <div className="hud-reticle">
-                <span />
-              </div>
-              <div className="mt-8 flex items-end justify-between">
+            <div className="hud-card hero-status-card">
+              <div className="flex items-end justify-between">
                 <div>
                   <p className="data-label">STATUT</p>
-                  <p className="mt-1 text-xs tracking-[0.15em]">
+                  <p className="hero-status-value mt-1 text-xs tracking-[0.15em]">
                     {siteConfig.availability}
                   </p>
                 </div>

@@ -1,9 +1,5 @@
 import {
-  defaultProjects,
-  defaultSkills,
-  defaultTools,
-  defaultCertifications,
-  defaultTimeline,
+  defaultSkillCategories,
 } from "../data/defaults";
 import type {
   CertificationBadge,
@@ -41,7 +37,7 @@ const normalizeHttpUrl = (value: unknown): string => {
 };
 
 export function normalizeProjects(raw: unknown): Project[] {
-  if (!Array.isArray(raw)) return defaultProjects;
+  if (!Array.isArray(raw)) return [];
 
   return raw
     .filter(isRecord)
@@ -68,7 +64,19 @@ export function normalizeProjects(raw: unknown): Project[] {
         title: asString(item.title).trim(),
         technologies: Array.from(new Set(technologies)),
         description: asString(item.description).trim(),
+        contributorCount:
+          typeof item.contributorCount === "number" &&
+          Number.isInteger(item.contributorCount) &&
+          item.contributorCount > 0
+            ? item.contributorCount
+            : undefined,
+        startDate: asString(item.startDate).trim(),
+        endDate: asString(item.endDate).trim(),
         image: asString(item.image).trim(),
+        imageSource:
+          item.imageSource === "upload" || asString(item.image).startsWith("data:")
+            ? "upload"
+            : "url",
         color: isHexColor(color) ? color : FALLBACK_ACCENT,
       };
     })
@@ -76,18 +84,30 @@ export function normalizeProjects(raw: unknown): Project[] {
 }
 
 export function normalizeSkills(raw: unknown): Skill[] {
-  if (!Array.isArray(raw)) return defaultSkills;
+  if (!Array.isArray(raw)) return [];
 
   return raw.filter(isRecord).map((item, index): Skill => {
     return {
       id: asString(item.id) || `skill-legacy-${index}`,
       name: asString(item.name).trim(),
+      category: asString(item.category).trim() || "Autres",
     };
   }).filter((skill) => skill.name !== "");
 }
 
+export function normalizeSkillCategories(raw: unknown): string[] {
+  if (!Array.isArray(raw)) return defaultSkillCategories;
+
+  const categories = raw
+    .filter((category): category is string => typeof category === "string")
+    .map((category) => category.trim())
+    .filter(Boolean);
+
+  return Array.from(new Set([...categories, "Autres"]));
+}
+
 export function normalizeTools(raw: unknown): string[] {
-  if (!Array.isArray(raw)) return defaultTools;
+  if (!Array.isArray(raw)) return [];
 
   const cleaned = raw
     .filter((tool): tool is string => typeof tool === "string")
@@ -98,7 +118,7 @@ export function normalizeTools(raw: unknown): string[] {
 }
 
 export function normalizeTimeline(raw: unknown): TimelineEntry[] {
-  if (!Array.isArray(raw)) return defaultTimeline;
+  if (!Array.isArray(raw)) return [];
 
   return raw
     .filter(isRecord)
@@ -107,6 +127,8 @@ export function normalizeTimeline(raw: unknown): TimelineEntry[] {
       period: asString(item.period).trim(),
       title: asString(item.title).trim(),
       organization: asString(item.organization).trim(),
+      location: asString(item.location).trim(),
+      diploma: asString(item.diploma).trim(),
       description: asString(item.description).trim(),
     }))
     .filter((entry) => entry.period !== "" && entry.title !== "");
@@ -115,7 +137,7 @@ export function normalizeTimeline(raw: unknown): TimelineEntry[] {
 export function normalizeCertifications(
   raw: unknown,
 ): CertificationBadge[] {
-  if (!Array.isArray(raw)) return defaultCertifications;
+  if (!Array.isArray(raw)) return [];
 
   return raw
     .filter(isRecord)

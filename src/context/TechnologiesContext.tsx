@@ -32,11 +32,14 @@ const normalizeTechnologies = (raw: unknown): Technology[] => {
   );
 };
 
+export { normalizeTechnologies };
+
 type TechnologiesContextValue = {
   technologies: Technology[];
   addTechnology: (name: string) => void;
   removeTechnology: (id: string) => void;
   updateTechnology: (id: string, name: string) => void;
+  replaceTechnologies: (technologies: Technology[]) => void;
 };
 
 const TechnologiesContext = createContext<
@@ -55,6 +58,8 @@ export function TechnologiesProvider({
     [],
     normalizeTechnologies,
   );
+
+  const replaceTechnologies = (next: Technology[]) => setTechnologies(next);
 
     const addTechnology = (name: string) => {
     const trimmedName = name.trim();
@@ -105,8 +110,9 @@ export function TechnologiesProvider({
         addTechnology,
         removeTechnology,
         updateTechnology,
+        replaceTechnologies,
   }),
-  [technologies],
+  [technologies, replaceTechnologies],
 );
 
   return (

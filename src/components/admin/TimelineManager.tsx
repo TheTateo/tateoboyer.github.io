@@ -7,6 +7,8 @@ const emptyEntry: TimelineEntryInput = {
   period: "",
   title: "",
   organization: "",
+  location: "",
+  diploma: "",
   description: "",
 };
 
@@ -29,6 +31,8 @@ export default function TimelineManager() {
       period: form.period.trim(),
       title: form.title.trim(),
       organization: form.organization.trim(),
+      location: form.location.trim(),
+      diploma: form.diploma.trim(),
       description: form.description.trim(),
     };
 
@@ -50,6 +54,8 @@ export default function TimelineManager() {
       period: entry.period,
       title: entry.title,
       organization: entry.organization,
+      location: entry.location,
+      diploma: entry.diploma,
       description: entry.description,
     });
     setEditingId(entry.id);
@@ -89,6 +95,11 @@ export default function TimelineManager() {
                 {entry.organization && (
                   <p className="mt-1 truncate text-xs text-white/40">
                     {entry.organization}
+                  </p>
+                )}
+                {(entry.location || entry.diploma) && (
+                  <p className="mt-1 truncate text-xs text-white/35">
+                    {[entry.location, entry.diploma].filter(Boolean).join(" · ")}
                   </p>
                 )}
               </div>
@@ -203,6 +214,44 @@ export default function TimelineManager() {
                   }))
                 }
                 placeholder="École, entreprise, association…"
+                className="field-input"
+              />
+            </div>
+
+            <div>
+              <label htmlFor="timeline-location" className="field-label">
+                LIEU
+              </label>
+              <input
+                id="timeline-location"
+                type="text"
+                value={form.location}
+                onChange={(event) =>
+                  setForm((current) => ({
+                    ...current,
+                    location: event.target.value,
+                  }))
+                }
+                placeholder="Ville, région ou pays"
+                className="field-input"
+              />
+            </div>
+
+            <div>
+              <label htmlFor="timeline-diploma" className="field-label">
+                DIPLÔME (FACULTATIF)
+              </label>
+              <input
+                id="timeline-diploma"
+                type="text"
+                value={form.diploma}
+                onChange={(event) =>
+                  setForm((current) => ({
+                    ...current,
+                    diploma: event.target.value,
+                  }))
+                }
+                placeholder="Ex. Licence, Master…"
                 className="field-input"
               />
             </div>
