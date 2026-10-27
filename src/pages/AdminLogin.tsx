@@ -9,6 +9,7 @@ export default function AdminLogin() {
   const navigate = useNavigate();
   const location = useLocation();
 
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
@@ -21,23 +22,29 @@ export default function AdminLogin() {
 
   const handleSubmit = async (event: FormEvent) => {
     event.preventDefault();
-    if (loading || !password) return;
+
+    if (loading || !email.trim() || !password) return;
 
     setLoading(true);
     setError("");
 
-    const success = await login(password);
+    try {
+      const success = await login(email.trim(), password);
 
-    if (success) {
+      if (!success) {
+        // Petite pause pour décourager les essais à la chaîne
+        await new Promise((resolve) => setTimeout(resolve, 800));
+        setError("E-mail ou mot de passe incorrect.");
+        setPassword("");
+        return;
+      }
       navigate(from, { replace: true });
-      return;
+    } catch {
+      setError("Impossible de se connecter. Réessaie dans un instant.");
+      setPassword("");
+    } finally {
+      setLoading(false);
     }
-
-    // Petite pause pour décourager les essais à la chaîne
-    await new Promise((resolve) => setTimeout(resolve, 800));
-    setError("Mot de passe incorrect.");
-    setPassword("");
-    setLoading(false);
   };
 
   return (
@@ -64,6 +71,23 @@ export default function AdminLogin() {
           </div>
         ) : (
           <form onSubmit={handleSubmit} className="mt-8 space-y-6" noValidate>
+            <div>
+              <label htmlFor="email" className="field-label">
+                ADRESSE E-MAIL
+              </label>
+              <input
+                id="email"
+                type="email"
+                autoComplete="username"
+                autoFocus
+                required
+                value={email}
+                onChange={(event) => setEmail(event.target.value)}
+                aria-invalid={error ? "true" : undefined}
+                aria-describedby={error ? "login-error" : undefined}
+                className="field-input"
+              />
+            </div>
             <div>
               <label htmlFor="password" className="field-label">
                 MOT DE PASSE

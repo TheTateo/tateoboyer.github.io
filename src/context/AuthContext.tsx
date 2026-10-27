@@ -2,11 +2,13 @@ import {
   createContext,
   useCallback,
   useContext,
+  useEffect,
   useMemo,
   useState,
   type ReactNode,
 } from "react";
 
+import { supabase } from "../lib/supabase"
 /**
  * Protection de l'admin CÔTÉ NAVIGATEUR uniquement.
  *
@@ -19,76 +21,101 @@ import {
  * Avec un backend, on remplacera `login` par un appel serveur.
  */
 
-const SESSION_KEY = "portfolio-admin-session";
-
-const PASSWORD_HASH = String(import.meta.env.VITE_ADMIN_PASSWORD_HASH ?? "")
-  .trim()
-  .toLowerCase();
-
-async function sha256(text: string): Promise<string> {
-  const data = new TextEncoder().encode(text);
-  const digest = await crypto.subtle.digest("SHA-256", data);
-  return Array.from(new Uint8Array(digest))
-    .map((byte) => byte.toString(16).padStart(2, "0"))
-    .join("");
-}
-
-function readSession(): boolean {
-  try {
-    return sessionStorage.getItem(SESSION_KEY) === "1";
-  } catch {
-    return false;
-  }
-}
+const ADMIN_USER_ID = String(
+import.meta.env.VITE_ADMIN_USER_ID ?? ""
+).trim();
 
 type AuthContextValue = {
   isAuthenticated: boolean;
   /** false si VITE_ADMIN_PASSWORD_HASH n'est pas défini : l'admin reste alors verrouillé. */
   isConfigured: boolean;
-  login: (password: string) => Promise<boolean>;
-  logout: () => void;
+  login: (email: string, password: string) => Promise<boolean>;
+  logout: () => Promise<void>;
 };
 
 const AuthContext = createContext<AuthContextValue | null>(null);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
-  const [isAuthenticated, setIsAuthenticated] = useState(readSession);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isReady, setIsReady] = useState(false);
 
-  const login = useCallback(async (password: string): Promise<boolean> => {
-    if (!PASSWORD_HASH) return false;
+  useEffect(() => {
+    let active = true;
 
-    try {
-      const hash = await sha256(password);
-      if (hash !== PASSWORD_HASH) return false;
+    // Vérifie s'il existe déjà une session Supabase
+    supabase.auth.getSession().then(({ data, error }) => {
+      if (!active) return;
 
-      sessionStorage.setItem(SESSION_KEY, "1");
-      setIsAuthenticated(true);
-      return true;
-    } catch {
-      // crypto.subtle indisponible (page en http hors localhost, par ex.)
-      return false;
-    }
+      const userId = data.session?.user.id;
+      setIsAuthenticated(
+        !error && !!ADMIN_USER_ID && userId === ADMIN_USER_ID
+      );
+      setIsReady(true);
+    });
+
+    // Suit les connexions et déconnexions.
+    const {
+      data: { subscription},
+    } = supabase.auth.onAuthStateChange((_event, session) => {
+      if (!active) return;
+
+      setIsAuthenticated(
+        !!ADMIN_USER_ID && session?.user.id === ADMIN_USER_ID
+      );
+      setIsReady(true);
+    });
+
+    return () => {
+      active = false;
+      subscription.unsubscribe();
+    };
   }, []);
 
-  const logout = useCallback(() => {
-    try {
-      sessionStorage.removeItem(SESSION_KEY);
-    } catch {
-      // ignore
+  const login = useCallback(async (email: string, password: string): Promise<boolean> => {
+    if (!ADMIN_USER_ID) return false;
+
+    const { data, error } = await supabase.auth.signInWithPassword({
+      email,
+      password,
+    });
+
+    if (error || !data.user) {
+      return false;
     }
+
+    // Seul le compte administrateur autorisé peut accéder à l'admin
+    if (data.user.id !== ADMIN_USER_ID) {
+      await supabase.auth.signOut();
+      setIsAuthenticated(false);
+      return false;
+    }
+
+    setIsAuthenticated(true);
+    return true;
+  },
+  []
+);
+
+  const logout = useCallback(async (): Promise<void> => {
+    await supabase.auth.signOut();
     setIsAuthenticated(false);
   }, []);
 
   const value = useMemo(
     () => ({
       isAuthenticated,
-      isConfigured: PASSWORD_HASH !== "",
+      isConfigured: !!ADMIN_USER_ID,
       login,
       logout,
     }),
     [isAuthenticated, login, logout],
   );
 
+  // Evite d'afficher l'interface avant d'avoir vérifié la session
+  if (!isReady) {
+    return null;
+  }
+  
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
 
