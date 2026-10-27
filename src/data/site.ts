@@ -9,7 +9,7 @@ export const siteConfig = {
   city: "STRASBOURG, FR",
   availability: "DISPONIBLE POUR UNE ALTERNANCE",
   // CV disponible dans /public/cv.pdf.
-  cvUrl: "/cv.pdf",
+  cvUrl: `${import.meta.env.BASE_URL}cv.pdf`,
   socials: [
     { label: "GITHUB", url: "https://github.com/TheTateo" },
     { label: "LINKEDIN", url: "https://www.linkedin.com/in/tateo-boyer/" },

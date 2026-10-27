@@ -26,7 +26,7 @@ export default function Header() {
           aria-label="Retour à l'accueil"
         >
           <img
-            src="/spectre.svg"
+            src={`${import.meta.env.BASE_URL}spectre.svg`}
             alt="Spectre"
             className="h-12 w-12 object-contain"
           />
@@ -39,10 +39,10 @@ export default function Header() {
 
         <nav className="hidden items-center gap-9 text-[11px] font-semibold tracking-[0.2em] text-white/60 md:flex">
           {navItems.map((item, index) => (
-            <a key={item.to} href={item.to} className="nav-link">
+            <Link key={item.to} to={item.to} className="nav-link">
               <span className="mr-2 text-acid/70">0{index + 1}</span>
               {item.label}
-            </a>
+            </Link>
           ))}
         </nav>
 
@@ -71,10 +71,10 @@ export default function Header() {
 
       <div className={`mobile-menu ${menuOpen ? "mobile-menu-open" : ""}`}>
         {mobileItems.map((item, index) => (
-          <a key={item.to} href={item.to} onClick={closeMenu}>
+          <Link key={item.to} to={item.to} onClick={closeMenu}>
             <span>0{index + 1}</span>
             {item.label}
-          </a>
+          </Link>
         ))}
       </div>
     </header>
