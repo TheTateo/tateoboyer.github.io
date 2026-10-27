@@ -44,6 +44,9 @@ jobs:
             VITE_ADMIN_USER_ID: ${{ vars.VITE_ADMIN_USER_ID }}
             VITE_CONTACT_ENDPOINT: ${{ vars.VITE_CONTACT_ENDPOINT }}
 
+      - name: Configure SPA fallback
+        run: cp dist/index.html dist/404.html
+
       - name: Configure Pages
         uses: actions/configure-pages@v5
 
