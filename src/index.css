@@ -367,6 +367,12 @@ button {
   color: white;
 }
 
+#profil,
+#projets,
+#competences {
+  scroll-margin-top: 72px;
+}
+
 .project:last-child {
   border-bottom: 1px solid rgba(255,255,255,.12);
 }
