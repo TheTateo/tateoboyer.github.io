@@ -83,11 +83,11 @@ export default function ProjectModal({ project, onClose }: ProjectModalProps) {
               {(project.startDate || project.endDate) && (
                 <div>
                   <dt className="text-[10px] font-bold tracking-[0.2em] text-white/35">
-                    PÃ‰RIODE
+                    PÉRIODE
                   </dt>
                   <dd className="mt-1">
                     {project.startDate ? formatProjectDate(project.startDate) : ""}
-                    {project.startDate && project.endDate ? " â€” " : ""}
+                    {project.startDate && project.endDate ? " — " : ""}
                     {project.endDate ? formatProjectDate(project.endDate) : ""}
                   </dd>
                 </div>
