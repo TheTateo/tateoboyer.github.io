@@ -107,10 +107,12 @@ export default function Footer() {
             ))}
           </svg>
 
-          <span className="relative z-10">
-            {siteConfig.firstName} {siteConfig.lastName} — PORTFOLIO
-          </span>
-
+          <div className="relative z-10 flex flex-wrap items-center gap-x-6 gap-y-3">
+            <span>{siteConfig.firstName} {siteConfig.lastName} — PORTFOLIO</span>
+            <Link to="/mentions-legales" className="footer-meta-link">
+              MENTIONS LÉGALES
+            </Link>
+          </div>
           <div className="footer-meta-right relative z-10 flex flex-wrap items-center gap-x-6 gap-y-4 md:gap-x-8">
             <div className="flex items-center gap-6">
               {siteConfig.socials.map((social) => (

@@ -13,6 +13,7 @@ import Admin from "./pages/Admin";
 import AdminLogin from "./pages/AdminLogin";
 import Contact from "./pages/Contact";
 import Home from "./pages/Home";
+import LegalNotices from "./pages/LegalNotices";
 import NotFound from "./pages/NotFound";
 import Projects from "./pages/Projects";
 import Skills from "./pages/Skills";
@@ -56,6 +57,7 @@ export default function App() {
                       <Route path="competences" element={<Skills />} />
                       <Route path="parcours" element={<Timeline />} />
                       <Route path="contact" element={<Contact />} />
+                      <Route path="mentions-legales" element={<LegalNotices />} />
                       <Route path="*" element={<NotFound />} />
                     </Route>
 

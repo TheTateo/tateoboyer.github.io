@@ -10,9 +10,11 @@ export default function SkillsSection() {
   const skillCategories = Array.from(
     new Set(visibleSkills.map((skill) => skill.category || uncategorizedLabel)),
   );
-  const [activeCategoryIndex, setActiveCategoryIndex] = useState(0);
+  const [activeCategory, setActiveCategory] = useState("");
   const [activeAI, setActiveAI] = useState<string | null>(null);
-  const activeCategory = skillCategories[activeCategoryIndex];
+  const selectedCategory = skillCategories.includes(activeCategory)
+    ? activeCategory
+    : (skillCategories[0] ?? "");
   const toolRows = Array.from(
     { length: Math.ceil(tools.length / 3) },
     (_, rowIndex) => tools.slice(rowIndex * 3, rowIndex * 3 + 3),
@@ -75,14 +77,28 @@ export default function SkillsSection() {
         <div className="self-end">
           <div className="capability-group-heading">
             <span>HARD SKILLS</span>
-                        <div className="category-navigation" aria-label="Navigation des categories">
-              <button type="button" aria-label="Categorie precedente" disabled={skillCategories.length < 2} onClick={() => setActiveCategoryIndex((index) => (index - 1 + skillCategories.length) % skillCategories.length)}>{"←"}</button>
-              <button type="button" aria-label="Categorie suivante" disabled={skillCategories.length < 2} onClick={() => setActiveCategoryIndex((index) => (index + 1) % skillCategories.length)}>{"→"}</button>
-            </div>
+            {skillCategories.length > 0 && (
+              <div>
+                <label className="sr-only" htmlFor="skill-category-select">
+                  Sélectionner une catégorie de hard skills
+                </label>
+                <select
+                  id="skill-category-select"
+                  className="skill-category-select"
+                  value={selectedCategory}
+                  onChange={(event) => setActiveCategory(event.target.value)}
+                >
+                  {skillCategories.map((category) => (
+                    <option key={category} value={category}>
+                      {category}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            )}
           </div>
-
           <div className="space-y-8">
-            {skillCategories.filter((category) => category === activeCategory).map((category) => {
+            {skillCategories.filter((category) => category === selectedCategory).map((category) => {
               const categorySkills = visibleSkills.filter(
                 (skill) => (skill.category || uncategorizedLabel) === category,
               );

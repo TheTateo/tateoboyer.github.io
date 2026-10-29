@@ -1330,6 +1330,12 @@ button {
   color: var(--acid);
 }
 
+.legal-copy a {
+  color: var(--acid);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
 .footer-location {
   padding-left: 1.5rem;
   border-left: 1px solid rgba(212, 177, 119, .32);
@@ -1813,8 +1819,32 @@ button {
   color: #ff8a70;
 }
 
-.category-navigation { display: flex; align-items: center; gap: 6px; }
-.category-navigation button { display: grid; width: 28px; height: 28px; place-items: center; border: 1px solid rgba(255,255,255,.16); color: rgba(255,255,255,.72); font-size: 16px; line-height: 1; transition: color .2s, border-color .2s, background .2s; }
-.category-navigation button:hover:not(:disabled) { border-color: var(--acid); color: var(--acid); background: color-mix(in srgb, var(--acid) 8%, transparent); }
-.category-navigation button:disabled { cursor: default; opacity: .35; }
-.category-navigation button:focus-visible { outline: 1px solid var(--acid); outline-offset: 3px; }
+.skill-category-select {
+  min-width: 170px;
+  min-height: 38px;
+  padding: 0.55rem 2.25rem 0.55rem 0.8rem;
+  border: 1px solid rgba(255,255,255,.18);
+  appearance: none;
+  background-color: rgba(255,255,255,.035);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='m1 1 5 5 5-5' fill='none' stroke='%23ac3acf' stroke-width='1.5'/%3E%3C/svg%3E");
+  background-position: right 0.8rem center;
+  background-repeat: no-repeat;
+  color: rgba(255,255,255,.8);
+  cursor: pointer;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  transition: border-color .2s, background-color .2s;
+}
+
+.skill-category-select:hover,
+.skill-category-select:focus-visible {
+  border-color: var(--acid);
+  outline: none;
+}
+
+.skill-category-select option {
+  color: #f3eff5;
+  background: #111016;
+}
