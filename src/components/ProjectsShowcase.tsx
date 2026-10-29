@@ -1,4 +1,4 @@
-import { useState, type CSSProperties } from "react";
+﻿import { useState, type CSSProperties } from "react";
 import { formatIndex } from "../lib/utils";
 import type { Project } from "../types";
 import { Arrow } from "./Icons";
@@ -47,14 +47,12 @@ export default function ProjectsShowcase({ projects }: ProjectsShowcaseProps) {
               </h3>
               {project.technologies.length > 0 && (
                 <div className="mt-4 flex max-w-full gap-2 overflow-x-auto pb-1">
-                  {project.technologies.map((technology, index) => (
-                    <span key={technology} className="flex shrink-0 items-center gap-2">
-                      {index > 0 && (
-                        <span aria-hidden="true" className="text-acid">·</span>
-                      )}
-                      <span className="text-[10px] font-semibold uppercase tracking-[0.15em] text-white/50">
-                        {technology}
-                      </span>
+                  {project.technologies.map((technology) => (
+                    <span
+                      key={technology}
+                      className="project-technology shrink-0 border px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.15em]"
+                    >
+                      {technology}
                     </span>
                   ))}
                 </div>

@@ -394,6 +394,18 @@ button {
   color: rgba(8,10,13,.55);
 }
 
+.project-technology {
+  border-color: rgba(255,255,255,.24);
+  background: rgba(8,10,13,.82);
+  color: rgba(255,255,255,.78);
+}
+
+.project:hover .project-technology {
+  border-color: rgba(255,255,255,.3);
+  background: #080a0d;
+  color: white;
+}
+
 .project-visual {
   position: absolute;
   z-index: -1;
