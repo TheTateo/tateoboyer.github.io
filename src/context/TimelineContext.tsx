@@ -6,7 +6,7 @@ import {
   type ReactNode,
 } from "react";
 import { defaultTimeline } from "../data/defaults";
-import { usePersistentState } from "../hooks/usePersistentState";
+import { useSupabaseState } from "../hooks/useSupabaseState";
 import { normalizeTimeline } from "../lib/normalize";
 import { STORAGE_KEYS } from "../lib/storage";
 import { createId, moveItem } from "../lib/utils";
@@ -25,7 +25,7 @@ type TimelineContextValue = {
 const TimelineContext = createContext<TimelineContextValue | null>(null);
 
 export function TimelineProvider({ children }: { children: ReactNode }) {
-  const [entries, setEntries] = usePersistentState<TimelineEntry[]>(
+  const [entries, setEntries] = useSupabaseState<TimelineEntry[]>(
     STORAGE_KEYS.timeline,
     defaultTimeline,
     normalizeTimeline,

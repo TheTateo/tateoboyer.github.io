@@ -6,7 +6,7 @@ import {
   type ReactNode,
 } from "react";
 import { defaultProjects } from "../data/defaults";
-import { usePersistentState } from "../hooks/usePersistentState";
+import { useSupabaseState } from "../hooks/useSupabaseState";
 import { normalizeProjects } from "../lib/normalize";
 import { STORAGE_KEYS } from "../lib/storage";
 import { createId, moveItem } from "../lib/utils";
@@ -25,7 +25,7 @@ type ProjectsContextValue = {
 const ProjectsContext = createContext<ProjectsContextValue | null>(null);
 
 export function ProjectsProvider({ children }: { children: ReactNode }) {
-  const [projects, setProjects] = usePersistentState<Project[]>(
+  const [projects, setProjects] = useSupabaseState<Project[]>(
     STORAGE_KEYS.projects,
     defaultProjects,
     normalizeProjects,

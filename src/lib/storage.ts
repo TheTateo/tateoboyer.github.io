@@ -1,8 +1,4 @@
-/**
- * Couche d'accès aux données persistées.
- * Tout ce qui touche à localStorage passe par ici : le jour où tu passes
- * à un backend (Supabase, Firebase...), c'est ce fichier + les contextes qu'on adapte.
- */
+/** Clés historiques et lecture des anciennes données locales à migrer vers Supabase. */
 
 export const STORAGE_KEYS = {
   projects: "portfolio-projects", // même clé qu'avant : tes projets existants sont conservés
@@ -23,10 +19,3 @@ export function readJSON<T>(key: string): T | null {
   }
 }
 
-export function writeJSON(key: string, value: unknown): void {
-  try {
-    localStorage.setItem(key, JSON.stringify(value));
-  } catch (error) {
-    console.error(`Impossible d'écrire "${key}" dans le localStorage`, error);
-  }
-}

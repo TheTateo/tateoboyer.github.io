@@ -10,7 +10,7 @@ import {
   defaultSkills,
   defaultTools,
 } from "../data/defaults";
-import { usePersistentState } from "../hooks/usePersistentState";
+import { useSupabaseState } from "../hooks/useSupabaseState";
 import {
   normalizeSkillCategories,
   normalizeAINames,
@@ -49,22 +49,22 @@ type SkillsContextValue = {
 const SkillsContext = createContext<SkillsContextValue | null>(null);
 
 export function SkillsProvider({ children }: { children: ReactNode }) {
-  const [skills, setSkills] = usePersistentState<Skill[]>(
+  const [skills, setSkills] = useSupabaseState<Skill[]>(
     STORAGE_KEYS.skills,
     defaultSkills,
     normalizeSkills,
   );
-  const [tools, setTools] = usePersistentState<string[]>(
+  const [tools, setTools] = useSupabaseState<string[]>(
     STORAGE_KEYS.tools,
     defaultTools,
     normalizeTools,
   );
-  const [aiNames, setAINames] = usePersistentState<string[]>(
+  const [aiNames, setAINames] = useSupabaseState<string[]>(
     STORAGE_KEYS.aiNames,
     [],
     normalizeAINames,
   );
-  const [storedCategories, setStoredCategories] = usePersistentState<string[]>(
+  const [storedCategories, setStoredCategories] = useSupabaseState<string[]>(
     STORAGE_KEYS.skillCategories,
     defaultSkillCategories,
     normalizeSkillCategories,

@@ -1,4 +1,4 @@
-import { useRef, useState, type ChangeEvent } from "react";
+import { useEffect, useRef, useState, type ChangeEvent } from "react";
 import { useProjects } from "../../context/ProjectsContext";
 import { useSkills } from "../../context/SkillsContext";
 import { useCertifications } from "../../context/CertificationsContext";
@@ -39,6 +39,15 @@ export default function DataTools() {
 
   const fileInput = useRef<HTMLInputElement>(null);
   const [message, setMessage] = useState("");
+
+  useEffect(() => {
+    const onSupabaseError = (event: Event) => {
+      const detail = (event as CustomEvent<string>).detail;
+      setMessage(detail || "Erreur lors de l'enregistrement Supabase.");
+    };
+    window.addEventListener("portfolio:supabase-error", onSupabaseError);
+    return () => window.removeEventListener("portfolio:supabase-error", onSupabaseError);
+  }, []);
 
   const handleExport = () => {
     const payload: PortfolioExport = {
@@ -143,9 +152,9 @@ export default function DataTools() {
       <p className="mb-2 text-xs tracking-[0.2em] text-white/40">DONNÉES</p>
       <h2 className="mb-3 text-xl font-bold">SAUVEGARDE</h2>
       <p className="mb-6 max-w-2xl text-sm leading-6 text-white/45">
-        Tes modifications sont stockées dans ce navigateur uniquement : les
-        visiteurs ne les voient pas. Exporte-les pour les sauvegarder, les
-        transférer sur un autre appareil.
+        Tes modifications sont enregistrées dans Supabase et partagées avec
+        les visiteurs du portfolio. Exporte-les pour en conserver une copie
+        ou importe une sauvegarde.
       </p>
 
       <div className="flex flex-wrap gap-3">

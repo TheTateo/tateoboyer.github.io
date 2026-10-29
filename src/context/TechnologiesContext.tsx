@@ -5,7 +5,7 @@ import {
   type ReactNode,
 } from "react";
 import type { Technology } from "../types";
-import { usePersistentState } from "../hooks/usePersistentState";
+import { useSupabaseState } from "../hooks/useSupabaseState";
 
 const TECHNOLOGIES_STORAGE_KEY = "portfolio-technologies";
 const legacyDefaultTechnologies = new Map([
@@ -53,7 +53,7 @@ type TechnologiesProviderProps = {
 export function TechnologiesProvider({
   children,
 }: TechnologiesProviderProps) {
-  const [technologies, setTechnologies] = usePersistentState<Technology[]>(
+  const [technologies, setTechnologies] = useSupabaseState<Technology[]>(
     TECHNOLOGIES_STORAGE_KEY,
     [],
     normalizeTechnologies,

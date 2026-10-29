@@ -6,7 +6,7 @@ import {
   type ReactNode,
 } from "react";
 import { defaultCertifications } from "../data/defaults";
-import { usePersistentState } from "../hooks/usePersistentState";
+import { useSupabaseState } from "../hooks/useSupabaseState";
 import { normalizeCertifications } from "../lib/normalize";
 import { STORAGE_KEYS } from "../lib/storage";
 import { createId, moveItem } from "../lib/utils";
@@ -34,7 +34,7 @@ export function CertificationsProvider({
   children: ReactNode;
 }) {
   const [certifications, setCertifications] =
-    usePersistentState<CertificationBadge[]>(
+    useSupabaseState<CertificationBadge[]>(
       STORAGE_KEYS.certifications,
       defaultCertifications,
       normalizeCertifications,
