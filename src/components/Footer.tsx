@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { siteConfig } from "../data/site";
+import footerRoots from "../assets/footer-roots.svg";
 import { Arrow } from "./Icons";
 
 const footerRootBranches = [
@@ -84,7 +85,7 @@ export default function Footer() {
         <div className="footer-meta relative mt-20 flex flex-col justify-between gap-5 border-t pt-6 text-[10px] font-bold tracking-[0.16em] md:flex-row md:items-center">
           <img
             className="footer-roots"
-            src="/footer-roots.svg"
+            src={footerRoots}
             alt=""
             aria-hidden="true"
           />

@@ -14,17 +14,7 @@ export default function CertificationsSection() {
         aria-hidden="true"
       >
         <div
-          className="absolute inset-y-[-8%] right-[-12%] w-[86%] bg-acid opacity-[0.055]"
-          style={{
-            WebkitMaskImage: "url('/symbole_titan.svg')",
-            WebkitMaskPosition: "center right",
-            WebkitMaskRepeat: "no-repeat",
-            WebkitMaskSize: "contain",
-            maskImage: "url('/symbole_titan.svg')",
-            maskPosition: "center right",
-            maskRepeat: "no-repeat",
-            maskSize: "contain",
-          }}
+          className="certifications-symbol-mask absolute inset-y-[-8%] right-[-12%] w-[86%] bg-acid opacity-[0.055]"
         />
       </div>
 

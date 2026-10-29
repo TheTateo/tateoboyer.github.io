@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { Arrow } from "../Icons";
 import { siteConfig } from "../../data/site";
+import photo from "../../assets/photo.png";
 
 export default function ProfileSection() {
   return (
@@ -10,18 +11,8 @@ export default function ProfileSection() {
       className="relative mx-auto max-w-[1240px] overflow-hidden px-5 pb-28 pt-36 md:px-10 md:pb-40 md:pt-48"
     >
       <div
-        className="absolute inset-y-[-8%] right-[-12%] w-[86%] bg-acid opacity-[0.055]"
+        className="profile-symbol-mask absolute inset-y-[-8%] right-[-12%] w-[86%] bg-acid opacity-[0.055]"
         aria-hidden="true"
-        style={{
-          WebkitMaskImage: "url('/symbole_chasseur.svg')",
-          WebkitMaskPosition: "center right",
-          WebkitMaskRepeat: "no-repeat",
-          WebkitMaskSize: "contain",
-          maskImage: "url('/symbole_chasseur.svg')",
-          maskPosition: "center right",
-          maskRepeat: "no-repeat",
-          maskSize: "contain",
-        }}
       />
 
       <div className="section-index">01 / IDENTITÉ</div>
@@ -31,7 +22,7 @@ export default function ProfileSection() {
           <div className="portrait-frame">
             <div className="portrait-placeholder relative">
               <img
-                src="/photo.png"
+                src={photo}
                 alt={`Portrait de ${siteConfig.firstName}`}
                 className="h-full w-full object-cover"
               />

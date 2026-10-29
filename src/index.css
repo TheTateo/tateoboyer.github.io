@@ -145,7 +145,7 @@ button {
 }
 
 .hero-image {
-  background: url("/voyageur-cite-lunaire.png") 50% center / cover;
+  background: url("./assets/voyageur-cite-lunaire.png") 50% center / cover;
   filter: saturate(.92) contrast(1.08);
 }
 
@@ -351,6 +351,32 @@ button {
 .text-link:hover {
   gap: 1.5rem;
   color: var(--acid);
+}
+
+.profile-symbol-mask,
+.projects-symbol-mask,
+.certifications-symbol-mask {
+  -webkit-mask-position: center right;
+  mask-position: center right;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-size: contain;
+  mask-size: contain;
+}
+
+.profile-symbol-mask {
+  -webkit-mask-image: url("./assets/symbole_chasseur.svg");
+  mask-image: url("./assets/symbole_chasseur.svg");
+}
+
+.projects-symbol-mask {
+  -webkit-mask-image: url("./assets/symbole_arcaniste.svg");
+  mask-image: url("./assets/symbole_arcaniste.svg");
+}
+
+.certifications-symbol-mask {
+  -webkit-mask-image: url("./assets/symbole_titan.svg");
+  mask-image: url("./assets/symbole_titan.svg");
 }
 
 .project {
@@ -1088,7 +1114,7 @@ button {
   top: 0;
   width: 31.96%;
   height: 100%;
-  background-image: url("/trois_symboles_exact.svg");
+  background-image: url("./assets/trois_symboles_exact.svg");
   background-repeat: no-repeat;
   background-size: 312.9% 100%;
 }
@@ -1339,6 +1365,16 @@ button {
   display: grid;
   place-items: center;
   padding: 20px;
+}
+
+.project-modal .project-modal-technologies {
+  font-size: 14px;
+}
+
+@media (min-width: 768px) {
+  .project-modal .project-modal-technologies {
+    font-size: 16px;
+  }
 }
 
 .modal-backdrop {

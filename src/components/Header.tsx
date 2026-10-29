@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { siteConfig } from "../data/site";
+import spectre from "../assets/spectre.svg";
 import { Arrow } from "./Icons";
 
 const navItems = [
@@ -26,7 +27,7 @@ export default function Header() {
           aria-label="Retour à l'accueil"
         >
           <img
-            src="/spectre.svg"
+            src={spectre}
             alt="Spectre"
             className="h-12 w-12 object-contain"
           />

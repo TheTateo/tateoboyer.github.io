@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+﻿import { useEffect } from "react";
 import type { Project } from "../types";
 
 const formatProjectDate = (value: string) => {
@@ -12,7 +12,7 @@ type ProjectModalProps = {
 };
 
 export default function ProjectModal({ project, onClose }: ProjectModalProps) {
-  // Fermeture avec Échap + blocage du scroll de la page derrière la modale
+  // Fermeture avec Ã‰chap + blocage du scroll de la page derriÃ¨re la modale
   useEffect(() => {
     const onKeyDown = (event: KeyboardEvent) => {
       if (event.key === "Escape") onClose();
@@ -62,7 +62,7 @@ export default function ProjectModal({ project, onClose }: ProjectModalProps) {
 
         <div className="p-7 md:p-10">
           {project.technologies.length > 0 && (
-            <p className="eyebrow">{project.technologies.join(" · ")}</p>
+            <p className="eyebrow project-modal-technologies">{project.technologies.join(" · ")}</p>
           )}
           <h2 className="font-display mt-3 text-5xl md:text-7xl">
             {project.title}
@@ -83,11 +83,11 @@ export default function ProjectModal({ project, onClose }: ProjectModalProps) {
               {(project.startDate || project.endDate) && (
                 <div>
                   <dt className="text-[10px] font-bold tracking-[0.2em] text-white/35">
-                    PÉRIODE
+                    PÃ‰RIODE
                   </dt>
                   <dd className="mt-1">
                     {project.startDate ? formatProjectDate(project.startDate) : ""}
-                    {project.startDate && project.endDate ? " — " : ""}
+                    {project.startDate && project.endDate ? " â€” " : ""}
                     {project.endDate ? formatProjectDate(project.endDate) : ""}
                   </dd>
                 </div>
