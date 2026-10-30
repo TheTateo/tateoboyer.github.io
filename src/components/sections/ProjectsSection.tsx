@@ -30,7 +30,7 @@ export default function ProjectsSection({ featuredOnly = false }: ProjectsSectio
         />
       </div>
 
-      <div className="relative z-10 mx-auto max-w-[1240px] px-5 md:px-10">
+      <div className="relative z-10 w-full px-5 md:px-10 2xl:px-[clamp(4rem,7vw,9rem)]">
         <div className="flex flex-col justify-between gap-6 md:flex-row md:items-end">
           <div>
             <p className="eyebrow">

@@ -304,6 +304,12 @@ button {
   letter-spacing: -.055em;
 }
 
+@media (min-width: 1536px) {
+  .section-title {
+    font-size: clamp(3.6rem, 6.1vw, 5.9rem);
+  }
+}
+
 .portrait-frame {
   position: relative;
   max-width: 480px;

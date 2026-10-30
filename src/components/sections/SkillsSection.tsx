@@ -24,7 +24,7 @@ export default function SkillsSection() {
     <section
       id="competences"
       data-scroll-reveal
-      className="relative isolate mx-auto max-w-[1240px] overflow-hidden px-5 pb-28 pt-36 md:px-10 md:pb-40 md:pt-48"
+      className="relative isolate w-full overflow-hidden px-5 pb-28 pt-36 md:px-10 md:pb-40 md:pt-48 2xl:px-[clamp(4rem,7vw,9rem)]"
     >
       <div className="relative z-10 grid gap-16 lg:grid-cols-2 lg:gap-28">
         <div>

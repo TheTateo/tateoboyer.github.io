@@ -7,7 +7,7 @@ export default function CertificationsSection() {
     <section
       id="certifications"
       data-scroll-reveal
-      className="relative isolate mx-auto max-w-[1240px] overflow-hidden px-5 pb-28 pt-20 md:px-10 md:pb-40 md:pt-28"
+      className="relative isolate w-full overflow-hidden px-5 pb-28 pt-20 md:px-10 md:pb-40 md:pt-28 2xl:px-[clamp(4rem,7vw,9rem)]"
     >
       <div
         className="pointer-events-none absolute inset-0"

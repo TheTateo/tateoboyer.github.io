@@ -18,7 +18,7 @@ function LegalSection({ title, children }: { title: string; children: ReactNode 
 
 export default function LegalNotices() {
   return (
-    <section className="mx-auto min-h-screen max-w-[1240px] px-5 pb-28 pt-36 md:px-10 md:pb-40 md:pt-48">
+    <section className="min-h-screen w-full px-5 pb-28 pt-36 md:px-10 md:pb-40 md:pt-48 2xl:px-[clamp(4rem,7vw,9rem)]">
       <div className="section-index">INFORMATIONS / TRANSPARENCE</div>
       <header className="mt-12 max-w-3xl">
         <p className="eyebrow">

@@ -55,11 +55,11 @@ export default function Footer() {
         </div>
       </div>
 
-      <div className="footer-content relative z-10 mx-auto max-w-[1240px]">
+      <div className="footer-content relative z-10 w-full 2xl:px-[clamp(4rem,7vw,9rem)]">
         <p className="text-[10px] font-bold tracking-[0.3em]">PROCHAINE MISSION</p>
 
         <div className="mt-5 flex flex-col items-start justify-between gap-10 lg:flex-row lg:items-end">
-          <h2 className="font-display max-w-5xl text-[clamp(4rem,10vw,9rem)] font-medium uppercase leading-[0.75] tracking-[-0.06em]">
+          <h2 className="font-display max-w-5xl text-[clamp(4rem,10vw,9rem)] 2xl:text-[clamp(4rem,9.3vw,8.4rem)] font-medium uppercase leading-[0.75] tracking-[-0.06em]">
             CRÉONS LE
             <br />
             PROCHAIN MONDE.

@@ -37,14 +37,14 @@ export default function Home() {
           <div className="hero-overlay absolute inset-0" />
         </div>
 
-        <div className="relative z-10 mx-auto grid w-full max-w-[1240px] grid-cols-1 items-end gap-10 px-5 pb-14 md:px-10 lg:pb-20 2xl:px-14">
+        <div className="relative z-10 grid w-full grid-cols-1 items-end gap-10 px-5 pb-14 md:px-10 lg:pb-20 2xl:px-[clamp(4rem,7vw,9rem)]">
           <div>
             <div className="reveal flex items-center gap-3 text-[10px] font-bold tracking-[0.32em] text-acid">
               <span className="h-px w-9 bg-current" />
               SIGNAL ÉTABLI — {siteConfig.city}
             </div>
 
-            <h1 className="reveal-delay font-display mt-7 max-w-5xl text-[clamp(4.5rem,9vw,8rem)] font-medium uppercase leading-[0.72] tracking-[-0.055em]">
+            <h1 className="reveal-delay font-display mt-7 max-w-5xl text-[clamp(4.5rem,9vw,8rem)] 2xl:text-[clamp(4.5rem,8.5vw,7.6rem)] font-medium uppercase leading-[0.72] tracking-[-0.055em]">
               BIENVENUE
               <span className="outline-text block pl-[7vw]">DANS</span>
               <span className="block">

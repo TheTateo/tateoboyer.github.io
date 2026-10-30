@@ -4,7 +4,7 @@ export default function Timeline() {
   const { entries } = useTimeline();
 
   return (
-    <section className="relative mx-auto min-h-screen max-w-[1240px] overflow-hidden px-4 pb-28 pt-28 sm:px-6 sm:pt-36 md:px-10 md:pb-40 md:pt-48">
+    <section className="relative min-h-screen w-full overflow-hidden px-4 pb-28 pt-28 sm:px-6 sm:pt-36 md:px-10 md:pb-40 md:pt-48 2xl:px-[clamp(4rem,7vw,9rem)]">
       <div className="section-index">PARCOURS / FORMATION & EXPÉRIENCES</div>
 
       <header className="mt-12 max-w-3xl">

@@ -42,7 +42,7 @@ export default function ProjectsShowcase({ projects }: ProjectsShowcaseProps) {
             </span>
 
             <div className="relative z-10 text-left">
-              <h3 className="font-display text-[clamp(2.5rem,5.5vw,5.5rem)] leading-none tracking-[-0.04em]">
+              <h3 className="font-display text-[clamp(2.5rem,5.5vw,5.5rem)] 2xl:text-[clamp(2.5rem,5.1vw,5.1rem)] leading-none tracking-[-0.04em]">
                 {project.title}
               </h3>
               {project.technologies.length > 0 && (
